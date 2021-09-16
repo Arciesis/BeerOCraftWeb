@@ -28,7 +28,7 @@ class ValidationConfig
     private $autoMapping;
     
     /**
-     * @default false
+     * @default true
      * @param ParamConfigurator|bool $value
      * @return $this
      */
@@ -52,7 +52,7 @@ class ValidationConfig
     }
     
     /**
-     * @default false
+     * @default true
      * @param ParamConfigurator|bool $value
      * @return $this
      */

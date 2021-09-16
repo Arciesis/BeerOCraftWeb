@@ -2,3 +2,5 @@ vendor/
 .idea/
 .env
 BeerOCraft.iml
+public/.htaccess
+var/
