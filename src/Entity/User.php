@@ -2,14 +2,31 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ *
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get",
+ *          "post",
+ *     },
+ *      itemOperations={
+ *          "get",
+ *          "delete",
+ *          "patch",
+ *     }
+ * )
+ *
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -17,8 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -33,8 +51,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     *
+     * @Assert\Length(min="3", max="15")
+     *
+     */
+    private string $username;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
 
     public function getId(): ?int
     {
@@ -69,6 +101,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUsername(): string
     {
         return (string) $this->email;
+    }
+
+    public function getRealUsername(): string
+    {
+        return $this->username;
     }
 
     /**
@@ -123,5 +160,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }
