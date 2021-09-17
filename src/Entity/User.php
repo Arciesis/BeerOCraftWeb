@@ -16,8 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(
  *     collectionOperations={
- *          "get",
- *          "post",
  *     },
  *      itemOperations={
  *          "get",
