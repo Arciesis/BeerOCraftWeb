@@ -1,0 +1,200 @@
+<?php
+
+namespace App\Entity;
+
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\HopRepository;
+use Doctrine\ORM\Mapping as ORM;
+use App\Exception\IngredientTypeException;
+
+/**
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=HopRepository::class)
+ */
+class Hop
+{
+    const TYPE = ['pellet', 'cones'];
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $alphaAcide;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $betaAcide;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $form;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $humulene;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $caryophyllene;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $cohumulone;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $Myrcene;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $polyphenole;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getAlphaAcide(): ?int
+    {
+        return $this->alphaAcide;
+    }
+
+    public function setAlphaAcide(int $alphaAcide): self
+    {
+        $this->alphaAcide = $alphaAcide;
+
+        return $this;
+    }
+
+    public function getBetaAcide(): ?int
+    {
+        return $this->betaAcide;
+    }
+
+    public function setBetaAcide(int $betaAcide): self
+    {
+        $this->betaAcide = $betaAcide;
+
+        return $this;
+    }
+
+    public function getForm(): ?string
+    {
+        return $this->form;
+    }
+
+    public function setForm(string $form): self
+    {
+        $this->form = $form;
+
+        return $this;
+    }
+
+    public function getHumulene(): ?int
+    {
+        return $this->humulene;
+    }
+
+    public function setHumulene(?int $humulene): self
+    {
+        $this->humulene = $humulene;
+
+        return $this;
+    }
+
+    public function getCaryophyllene(): ?int
+    {
+        return $this->caryophyllene;
+    }
+
+    public function setCaryophyllene(?int $caryophyllene): self
+    {
+        $this->caryophyllene = $caryophyllene;
+
+        return $this;
+    }
+
+    public function getCohumulone(): ?int
+    {
+        return $this->cohumulone;
+    }
+
+    public function setCohumulone(?int $cohumulone): self
+    {
+        $this->cohumulone = $cohumulone;
+
+        return $this;
+    }
+
+    public function getMyrcene(): ?int
+    {
+        return $this->Myrcene;
+    }
+
+    public function setMyrcene(?int $Myrcene): self
+    {
+        $this->Myrcene = $Myrcene;
+
+        return $this;
+    }
+
+    public function getPolyphenole(): ?int
+    {
+        return $this->polyphenole;
+    }
+
+    public function setPolyphenole(?int $polyphenole): self
+    {
+        $this->polyphenole = $polyphenole;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        if (in_array($type, self::TYPE)){
+            $this->type = $type;
+            return $this;
+        }
+        throw new IngredientTypeException('try to set a type that does not exist');
+    }
+}

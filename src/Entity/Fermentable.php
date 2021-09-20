@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Exception\IngredientTypeException;
 use App\Repository\FermentableRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Fermentable
 {
+    const TYPE = ['grain', 'extract'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -98,6 +101,16 @@ class Fermentable
      * @ORM\Column(type="smallint")
      */
     private $limitAttenuation;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
 
     public function getId(): ?int
     {
@@ -294,5 +307,31 @@ class Fermentable
         $this->limitAttenuation = $limitAttenuation;
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        if (in_array($type, self::TYPE)){
+        $this->type = $type;
+        return $this;
+        }
+        throw new IngredientTypeException('Try to set a type that does not exist');
     }
 }
