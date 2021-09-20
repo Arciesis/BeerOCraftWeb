@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,9 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *      itemOperations={
  *          "get",
- *          "delete",
- *          "patch",
- *     }
+ *          "patch"={"security"="is_granted('USER_EDIT', object)"}
+ *     },
  * )
  *
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
@@ -56,10 +57,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      *
-     * @Assert\Length(min="3", max="15")
+     * @Assert\Length(min="3", max="25")
      *
      */
-    private string $username;
+    private string $realUsername;
 
     /**
      * @ORM\Column(type="boolean")
@@ -101,10 +102,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    public function getRealUsername(): string
+    /*public function getRealUsername(): string
     {
         return $this->username;
-    }
+    }*/
 
     /**
      * @see UserInterface
@@ -160,9 +161,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function setUsername(string $username): self
+    public function setRealUsername(string $realUsername): self
     {
-        $this->username = $username;
+        $this->realUsername = $realUsername;
 
         return $this;
     }

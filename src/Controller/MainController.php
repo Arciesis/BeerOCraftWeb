@@ -15,9 +15,7 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        $form = $this->createForm(SignUpType::class);
-        $json = json_encode($form);
-        // dump($json);
+
         return $this->render('main/index.html.twig');
     }
 }
