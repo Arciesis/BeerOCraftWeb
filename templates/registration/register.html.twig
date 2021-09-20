@@ -7,10 +7,15 @@
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
+    {% for flashError in app.flashes('register_username_taken') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
     <h1>Register</h1>
 
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.realUsername) }}
         {{ form_row(registrationForm.Password, {
             label: 'Password'
         }) }}

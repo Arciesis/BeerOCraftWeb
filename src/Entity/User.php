@@ -161,6 +161,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    /**
+     * @return string
+     */
+    public function getRealUsername(): string
+    {
+        return $this->realUsername;
+    }
+
+
+
     public function setRealUsername(string $realUsername): self
     {
         $this->realUsername = $realUsername;

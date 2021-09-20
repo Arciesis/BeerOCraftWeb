@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/register", name="app_register", methods={"get","post"})
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -34,32 +34,44 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            if ($form->get('Password')->getData() === $form->get('Confirm_password')->getData()) {
-                $user->setPassword(
-                    $passwordEncoder->encodePassword(
-                        $user,
-                        $form->get('Password')->getData()
-                    )
+            $entityManager = $this->getDoctrine()->getManager()->getRepository(User::class);
+            $result = $entityManager->findOneBy([
+                'realUsername' => $form->get('realUsername')->getData(),
+            ]);
+
+            if ($result !== null) {
+                $this->addFlash('register_username_taken', 'Your Username is already taken');
+            } else {
+
+                if ($form->get('Password')->getData() === $form->get('Confirm_password')->getData()) {
+                    $user->setPassword(
+                        $passwordEncoder->encodePassword(
+                            $user,
+                            $form->get('Password')->getData()
+                        )
+                    );
+                }
+
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // generate a signed url and email it to the user
+                $this->emailVerifier->sendEmailConfirmation(
+                    'app_verify_email',
+                    $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('postmaster@beerocraft.xyz', 'BeerOCraft'))
+                        ->to($user->getEmail())
+                        ->subject('Please Confirm your Email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
                 );
+
+                // do anything else you need here, like send an email
+
+                return $this->redirectToRoute('index');
             }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('postmaster@sandbox3c66a4f5de9543bfb58f38ffddbdb1fd.mailgun.org', 'BeerOCraft'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('index');
         }
 
         return $this->render('registration/register.html.twig', [
