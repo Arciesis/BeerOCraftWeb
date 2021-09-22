@@ -105,11 +105,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    /*public function getRealUsername(): string
-    {
-        return $this->username;
-    }*/
-
     /**
      * @see UserInterface
      */

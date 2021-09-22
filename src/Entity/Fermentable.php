@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exception\IngredientTypeException;
 use App\Repository\FermentableRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=FermentableRepository::class)
@@ -13,12 +15,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Fermentable
 {
-    const TYPE = ['grain', 'extract'];
+    private const TYPE = ['grain', 'extract'];
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @ApiProperty(identifier=false)
      */
     private $id;
 
@@ -104,6 +108,10 @@ class Fermentable
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     *
+     * @ApiProperty(identifier=true)
+     * @Gedmo\Slug(fields={"name"})
      */
     private $name;
 
@@ -330,8 +338,7 @@ class Fermentable
     {
         if (in_array($type, self::TYPE)){
         $this->type = $type;
+        } else throw new IngredientTypeException('Try to set a type that does not exist');
         return $this;
-        }
-        throw new IngredientTypeException('Try to set a type that does not exist');
     }
 }

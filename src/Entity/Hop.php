@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\HopRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Exception\IngredientTypeException;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
@@ -13,11 +15,13 @@ use App\Exception\IngredientTypeException;
  */
 class Hop
 {
-    const TYPE = ['pellet', 'cones'];
+    private const TYPE = ['pellet', 'cones'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * @ApiProperty(identifier=false)
      */
     private $id;
 
@@ -63,6 +67,9 @@ class Hop
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @ApiProperty(identifier=true)
+     * @Gedmo\Slug(fields={"name"})
      */
     private $name;
 
@@ -193,8 +200,9 @@ class Hop
     {
         if (in_array($type, self::TYPE)){
             $this->type = $type;
-            return $this;
-        }
-        throw new IngredientTypeException('try to set a type that does not exist');
+        }else throw new IngredientTypeException('try to set a type that does not exist');
+        return $this;
+
+
     }
 }
