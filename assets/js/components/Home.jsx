@@ -1,10 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {Link} from 'react-router-dom';
+import LeftPanelMenu from './LeftPanelMenu';
 
 const Home = () => {
   return (
     <div>
-      <a href="/api">go to api</a>
+      <LeftPanelMenu />
+     <Link to="/dashboard">Go to apiPlatform</Link>
     </div>
   );
 };
