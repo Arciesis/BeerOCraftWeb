@@ -7,9 +7,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BoilerEquipmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use phpDocumentor\Reflection\Types\Integer;
-use Symfony\Component\Serializer\Annotation\Groups;
-
 
 /**
  * @ORM\Entity(repositoryClass=BoilerEquipmentRepository::class)
@@ -162,12 +159,12 @@ class BoilerEquipment
         return $this;
     }
 
-    public function getOwnerId(): ?User
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
 
-    public function setOwnerId(?User $owner): self
+    public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
 

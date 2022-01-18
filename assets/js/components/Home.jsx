@@ -10,10 +10,10 @@ const Home = () => {
       .catch(errors => console.log(errors))
   }
 
+
   return (
     <div>
       <LeftPanelMenu />
-    <button onClick={handleDashboard()}>go to dashboard</button>
     </div>
   );
 };
