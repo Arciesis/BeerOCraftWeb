@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -24,7 +26,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *          "patch"={"security"="is_granted('USER_EDIT', object)"}
  *     },
  * )
- *
+ * @UniqueEntity(fields={"realUsername"}, message="There is already an account with this username")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -69,6 +71,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BoilerEquipment::class, mappedBy="owner")
+     */
+    private $boilerEquipment;
+
+    public function __construct()
+    {
+        $this->boilerEquipment = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -184,6 +196,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BoilerEquipment[]
+     */
+    public function getBoilerEquipment(): Collection
+    {
+        return $this->boilerEquipment;
+    }
+
+    public function addBoilerEquipment(BoilerEquipment $boilerEquipment): self
+    {
+        if (!$this->boilerEquipment->contains($boilerEquipment)) {
+            $this->boilerEquipment[] = $boilerEquipment;
+            $boilerEquipment->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoilerEquipment(BoilerEquipment $boilerEquipment): self
+    {
+        if ($this->boilerEquipment->removeElement($boilerEquipment)) {
+            // set the owning side to null (unless already changed)
+            if ($boilerEquipment->getOwner() === $this) {
+                $boilerEquipment->setOwner(null);
+            }
+        }
 
         return $this;
     }

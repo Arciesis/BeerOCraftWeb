@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\BoilerEquipement;
+use App\Entity\BoilerEquipment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method BoilerEquipement|null find($id, $lockMode = null, $lockVersion = null)
- * @method BoilerEquipement|null findOneBy(array $criteria, array $orderBy = null)
- * @method BoilerEquipement[]    findAll()
- * @method BoilerEquipement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BoilerEquipment|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BoilerEquipment|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BoilerEquipment[]    findAll()
+ * @method BoilerEquipment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BoilerEquipementRepository extends ServiceEntityRepository
+class BoilerEquipmentRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BoilerEquipement::class);
+        parent::__construct($registry, BoilerEquipment::class);
     }
 
     // /**
-    //  * @return BoilerEquipement[] Returns an array of BoilerEquipement objects
+    //  * @return BoilerEquipment[] Returns an array of BoilerEquipment objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class BoilerEquipementRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?BoilerEquipement
+    public function findOneBySomeField($value): ?BoilerEquipment
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.exampleField = :val')

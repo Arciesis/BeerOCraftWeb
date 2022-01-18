@@ -4,16 +4,20 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\BoilerEquipementRepository;
+use App\Repository\BoilerEquipmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use phpDocumentor\Reflection\Types\Integer;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
- * @ORM\Entity(repositoryClass=BoilerEquipementRepository::class)
- * @ApiResource()
+ * @ORM\Entity(repositoryClass=BoilerEquipmentRepository::class)
+ *
+ * @ApiResource(
+ * )
  */
-class BoilerEquipement
+class BoilerEquipment
 {
     /**
      * @ORM\Id
@@ -57,6 +61,14 @@ class BoilerEquipement
      */
     private $grainAbsorption;
 
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="boilerEquipment")
+     * @ORM\JoinColumn(nullable=false)
+     *
+     */
+    private User $owner;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -84,7 +96,7 @@ class BoilerEquipement
         if ($preBoilVolume > 0) {
             $this->preBoilVolume = $preBoilVolume;
         } else {
-            throw new \InvalidArgumentException('negative pre boil volume');
+            throw new \InvalidArgumentException('negative or null pre boil volume');
         }
 
         return $this;
@@ -97,10 +109,10 @@ class BoilerEquipement
 
     public function setBatchSize(int $batchSize): self
     {
-        if ($batchSize < 0) {
+        if ($batchSize > 0) {
             $this->batchSize = $batchSize;
         } else {
-            throw new \InvalidArgumentException('negative batch size');
+            throw new \InvalidArgumentException('negative or null batch size');
         }
 
         return $this;
@@ -113,7 +125,7 @@ class BoilerEquipement
 
     public function setBoilTime(int $boilTime): self
     {
-        if ($boilTime < 0) {
+        if ($boilTime > 0) {
             $this->boilTime = $boilTime;
         } else {
             throw new \InvalidArgumentException('negative boil time');
@@ -129,9 +141,9 @@ class BoilerEquipement
 
     public function setEvaporationRatePercentage(int $evaporationRatePercentage): self
     {
-        if ($evaporationRatePercentage < 0 || $evaporationRatePercentage > 100) {
+        if ($evaporationRatePercentage > 0 || $evaporationRatePercentage < 100) {
             $this->evaporationRatePercentage = $evaporationRatePercentage;
-        } else throw new \InvalidArgumentException('evaporation rate isn\'t in persent');
+        } else throw new \InvalidArgumentException('evaporation rate isn\'t in percent');
 
         return $this;
     }
@@ -143,9 +155,21 @@ class BoilerEquipement
 
     public function setGrainAbsorption(float $grainAbsorption): self
     {
-        if ($grainAbsorption < 0) {
+        if ($grainAbsorption > 0) {
             $this->grainAbsorption = $grainAbsorption;
-        } else throw new \InvalidArgumentException('negative grain absorption');
+        } else throw new \InvalidArgumentException('negative or null grain absorption');
+
+        return $this;
+    }
+
+    public function getOwnerId(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwnerId(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }
