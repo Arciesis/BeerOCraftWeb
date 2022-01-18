@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -25,6 +26,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *          "get",
  *          "patch"={"security"="is_granted('USER_EDIT', object)"}
  *     },
+ *     normalizationContext={"groups"="user:read"},
+ *     denormalizationContext={"groups"="user:write"}
  * )
  * @UniqueEntity(fields={"realUsername"}, message="There is already an account with this username")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
@@ -35,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("user:read")
      *
      * @ApiProperty(identifier=false)
      */
@@ -42,11 +46,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups("user:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups("user:read")
      */
     private $roles = [];
 
@@ -54,6 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      *
+     * @Groups("user:read","user:write")
      */
     private $password;
 
@@ -61,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255, unique=true)
      *
      * @Assert\Length(min="3", max="25")
-     *
+     * @Groups("user:read")
      * @ApiProperty(identifier=true)
      * @Gedmo\Slug(fields={"realUsername"})
      */
@@ -69,11 +76,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups("user:read")
      */
     private $isVerified = false;
 
     /**
      * @ORM\OneToMany(targetEntity=BoilerEquipment::class, mappedBy="owner")
+     * @Groups("user:read")
      */
     private $boilerEquipment;
 
