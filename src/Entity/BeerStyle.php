@@ -14,7 +14,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ApiResource(
  *     collectionOperations={
  *     "get",
- *     "post",
  *     },
  *     itemOperations={
  *      "get",
