@@ -19,6 +19,7 @@
         "gedmo/doctrine-extensions": "^3.1",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
+        "sensio/framework-extra-bundle": "^6.2",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
@@ -56,7 +57,12 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": false,
+            "symfony/flex": false,
+            "symfony/runtime": false
+        }
     },
     "autoload": {
         "psr-4": {

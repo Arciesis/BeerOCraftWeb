@@ -13,6 +13,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass=BeerStyleRepository::class)
  * @ApiResource(
  *     collectionOperations={
+ *     "get",
+ *     "post",
  *     },
  *     itemOperations={
  *      "get",

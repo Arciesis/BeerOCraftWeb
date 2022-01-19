@@ -1,7 +1,9 @@
-import React, {useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react';
 import LeftPanelMenu from './LeftPanelMenu';
 import axios from 'axios';
+import BeerStylesMenu from './BeerStylesMenu';
+import {Redirect} from 'react-router-dom';
+
 
 const Home = () => {
   const handleDashboard = () => {
@@ -10,10 +12,10 @@ const Home = () => {
       .catch(errors => console.log(errors))
   }
 
-
   return (
     <div>
       <LeftPanelMenu />
+      <BeerStylesMenu />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import BeerStylesMenu from './BeerStylesMenu';
 // import LeftPanelMenu from '../../styles/LeftPanelMenu.css';
 
 const LeftPanelMenu = () => {
@@ -17,6 +18,10 @@ const LeftPanelMenu = () => {
         </li>
         <li>
           <Link to="/dashboard/boiler_equipments">Boiler Equipments</Link>
+        </li>
+        <li>
+          <Link to="/dashboard/beer_styles">Styles</Link>
+
         </li>
       </ul>
     </div>
