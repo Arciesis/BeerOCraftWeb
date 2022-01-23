@@ -6,7 +6,13 @@ public/.htaccess
 var/*
 var/cache/*
 var/cache/dev/*
-var/cache/dev/Symfony/*
+var/cache/dev/Symfony/Config/Doctrine
+var/cache/dev/Symfony/Config/Doctrine/Dbal/
+var/cache/dev/Symfony/Config/Doctrine/Orm/
+var/cache/dev/Symfony/Config/DoctrineMigrations/
+var/cache/dev/Symfony/Config/Framework/
+var/cache/dev/Symfony/Config/Doctrine/Twig/
+
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

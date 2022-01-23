@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
+    // TODO put a slug fields in all ApiRessource Entity that can be match with an URL
     /**
      * @Template("main/index.html.twig")
      * @Route("/", name="index")

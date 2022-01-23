@@ -3,16 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\InfusionMashStepsRepository;
+use App\Repository\DecoctionMashStepsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=InfusionMashStepsRepository::class)
+ * @ORM\Entity(repositoryClass=DecoctionMashStepsRepository::class)
  */
 #[ApiResource]
-class InfusionMashSteps
+class DecoctionMashSteps
 {
     /**
      * @ORM\Id
@@ -30,26 +30,24 @@ class InfusionMashSteps
      * @ORM\OneToOne(targetEntity=MashVolume::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?MashVolume $massVolumeEstimation;
+    private ?MashVolume $mashVolumeEstimation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=InitInfusion::class, inversedBy="relatedMashStep")
+     * @ORM\ManyToOne(targetEntity=InitInfusion::class, inversedBy="relatedDecoctionMashSteps")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?InitInfusion $initInfusion;
 
     /**
-     * @ORM\ManyToMany(targetEntity=NextInfusionMashStepWithGrainAdjunct::class, inversedBy="relatedInfusionMashSteps")
-     *
+     * @ORM\ManyToMany(targetEntity=NextDecoctionMashStepWithGrainAdjunct::class, inversedBy="relatedDecoctionMashSteps")
      */
     private ?ArrayCollection $mashStepWithAdjunct;
 
     /**
-     * @ORM\ManyToMany(targetEntity=NextInfusionMashStepWithoutGrainAdjunct::class, inversedBy="relatedInfusionMashSteps")
-     * @ORM\JoinTable(name="infusion_mash_steps_next_infusion_mash_step_wo_grain_adjunct")
-
+     * @ORM\ManyToMany(targetEntity=NextDecoctionMashStepWithoutGrainAdjunct::class, inversedBy="relatedDecoctionMashSteps")
+     * @ORM\JoinTable(name="decoction_mash_steps_next_decoction_mash_step_wo_grain_adjunct")
      */
-    private ?ArrayCollection $mashStepsWithoutAdjunct;
+    private ?ArrayCollection $mashStepWithoutGrainAdjunct;
 
     /**
      * @ORM\Column(type="float")
@@ -59,10 +57,10 @@ class InfusionMashSteps
     public function __construct()
     {
         $this->mashStepWithAdjunct = new ArrayCollection();
-        $this->mashStepsWithoutAdjunct = new ArrayCollection();
+        $this->mashStepWithoutGrainAdjunct = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?float
     {
         return $this->id;
     }
@@ -79,14 +77,14 @@ class InfusionMashSteps
         return $this;
     }
 
-    public function getMassVolumeEstimation(): ?MashVolume
+    public function getMashVolumeEstimation(): ?MashVolume
     {
-        return $this->massVolumeEstimation;
+        return $this->mashVolumeEstimation;
     }
 
-    public function setMassVolumeEstimation(MashVolume $massVolumeEstimation): self
+    public function setMashVolumeEstimation(MashVolume $mashVolumeEstimation): self
     {
-        $this->massVolumeEstimation = $massVolumeEstimation;
+        $this->mashVolumeEstimation = $mashVolumeEstimation;
 
         return $this;
     }
@@ -104,14 +102,14 @@ class InfusionMashSteps
     }
 
     /**
-     * @return Collection|NextInfusionMashStepWithGrainAdjunct[]
+     * @return Collection|NextDecoctionMashStepWithGrainAdjunct[]
      */
     public function getMashStepWithAdjunct(): Collection
     {
         return $this->mashStepWithAdjunct;
     }
 
-    public function addMashStepWithAdjunct(NextInfusionMashStepWithGrainAdjunct $mashStepWithAdjunct): self
+    public function addMashStepWithAdjunct(NextDecoctionMashStepWithGrainAdjunct $mashStepWithAdjunct): self
     {
         if (!$this->mashStepWithAdjunct->contains($mashStepWithAdjunct)) {
             $this->mashStepWithAdjunct[] = $mashStepWithAdjunct;
@@ -120,7 +118,7 @@ class InfusionMashSteps
         return $this;
     }
 
-    public function removeMashStepWithAdjunct(NextInfusionMashStepWithGrainAdjunct $mashStepWithAdjunct): self
+    public function removeMashStepWithAdjunct(NextDecoctionMashStepWithGrainAdjunct $mashStepWithAdjunct): self
     {
         $this->mashStepWithAdjunct->removeElement($mashStepWithAdjunct);
 
@@ -128,25 +126,25 @@ class InfusionMashSteps
     }
 
     /**
-     * @return Collection|NextInfusionMashStepWithoutGrainAdjunct[]
+     * @return Collection|NextDecoctionMashStepWithoutGrainAdjunct[]
      */
-    public function getMashStepsWithoutAdjunct(): Collection
+    public function getMashStepWithoutGrainAdjunct(): Collection
     {
-        return $this->mashStepsWithoutAdjunct;
+        return $this->mashStepWithoutGrainAdjunct;
     }
 
-    public function addMashStepsWithoutAdjunct(NextInfusionMashStepWithoutGrainAdjunct $mashStepsWithoutAdjunct): self
+    public function addMashStepWithoutGrainAdjunct(NextDecoctionMashStepWithoutGrainAdjunct $mashStepWithoutGrainAdjunct): self
     {
-        if (!$this->mashStepsWithoutAdjunct->contains($mashStepsWithoutAdjunct)) {
-            $this->mashStepsWithoutAdjunct[] = $mashStepsWithoutAdjunct;
+        if (!$this->mashStepWithoutGrainAdjunct->contains($mashStepWithoutGrainAdjunct)) {
+            $this->mashStepWithoutGrainAdjunct[] = $mashStepWithoutGrainAdjunct;
         }
 
         return $this;
     }
 
-    public function removeMashStepsWithoutAdjunct(NextInfusionMashStepWithoutGrainAdjunct $mashStepsWithoutAdjunct): self
+    public function removeMashStepWithoutGrainAdjunct(NextDecoctionMashStepWithoutGrainAdjunct $mashStepWithoutGrainAdjunct): self
     {
-        $this->mashStepsWithoutAdjunct->removeElement($mashStepsWithoutAdjunct);
+        $this->mashStepWithoutGrainAdjunct->removeElement($mashStepWithoutGrainAdjunct);
 
         return $this;
     }

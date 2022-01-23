@@ -17,48 +17,48 @@ class NextInfusionMashStepWithGrainAdjunct
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $waterGrainRatioId;
+    private ?WaterGrainRatio $waterGrainRatioId;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $grainMassToAdd;
+    private ?float $grainMassToAdd;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $tempOfGrainToAdd;
+    private ?float $tempOfGrainToAdd;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $wantedTempNextStep;
+    private ?float $wantedTempNextStep;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $waterTempToAdd;
+    private ?float $waterTempToAdd;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $waterVolumeToAdd;
+    private ?float $waterVolumeToAdd;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $newWaterGrainRatio;
+    private ?float $newWaterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $time;
+    private ?float $time;
 
     /**
      * @ORM\ManyToMany(targetEntity=InfusionMashSteps::class, mappedBy="mashStepWithAdjunct")

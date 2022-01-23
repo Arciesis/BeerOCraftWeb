@@ -15,31 +15,31 @@ class WaterGrainRatio
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $initMashTemp;
+    private ?float $initMashTemp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $initMashDryGrain;
+    private ?float $initMashDryGrain;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $initWaterVolume;
+    private ?float $initWaterVolume;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $initWaterGrainRatio;
+    private ?float $initWaterGrainRatio;
 
     public function getId(): ?int
     {

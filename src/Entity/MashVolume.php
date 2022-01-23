@@ -16,25 +16,25 @@ class MashVolume
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $massGrainInMash;
+    private ?float $massGrainInMash;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $waterGrainRatio;
+    private ?float $waterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $mashVolume;
+    private ?float $mashVolume;
 
     public function getId(): ?int
     {

@@ -17,13 +17,13 @@ class NextInfusionMashStepWithoutGrainAdjunct
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $waterGrainRatioId;
+    private ?WaterGrainRatio $waterGrainRatioId;
 
     /**
      * @ORM\Column(type="float")

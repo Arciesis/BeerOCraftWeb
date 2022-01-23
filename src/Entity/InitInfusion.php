@@ -19,45 +19,51 @@ class InitInfusion
    * @ORM\Column(type="integer")
    * @Assert\NotBlank()
    */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $initGrainTemp;
+    private ?float $initGrainTemp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $wantedMashTemp;
+    private ?float $wantedMashTemp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $waterGrainRatio;
+    private ?float $waterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $waterTempToAdjunct;
+    private ?float $waterTempToAdjunct;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
      */
-    private $time;
+    private ?float $time;
 
     /**
      * @ORM\OneToMany(targetEntity=InfusionMashSteps::class, mappedBy="initInfusion", orphanRemoval=true)
      */
-    private $relatedMashStep;
+    private ArrayCollection $relatedMashStep;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DecoctionMashSteps::class, mappedBy="initInfusion")
+     */
+    private ArrayCollection $relatedDecoctionMashSteps;
 
     public function __construct()
     {
         $this->relatedMashStep = new ArrayCollection();
+        $this->relatedDecoctionMashSteps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,6 +155,36 @@ class InitInfusion
             // set the owning side to null (unless already changed)
             if ($relatedMashStep->getInitInfusion() === $this) {
                 $relatedMashStep->setInitInfusion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DecoctionMashSteps[]
+     */
+    public function getRelatedDecoctionMashSteps(): Collection
+    {
+        return $this->relatedDecoctionMashSteps;
+    }
+
+    public function addRelatedDecoctionMashStep(DecoctionMashSteps $relatedDecoctionMashStep): self
+    {
+        if (!$this->relatedDecoctionMashSteps->contains($relatedDecoctionMashStep)) {
+            $this->relatedDecoctionMashSteps[] = $relatedDecoctionMashStep;
+            $relatedDecoctionMashStep->setInitInfusion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedDecoctionMashStep(DecoctionMashSteps $relatedDecoctionMashStep): self
+    {
+        if ($this->relatedDecoctionMashSteps->removeElement($relatedDecoctionMashStep)) {
+            // set the owning side to null (unless already changed)
+            if ($relatedDecoctionMashStep->getInitInfusion() === $this) {
+                $relatedDecoctionMashStep->setInitInfusion(null);
             }
         }
 
