@@ -42,20 +42,20 @@ final class Version20220123105618 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE infusion_mash_steps_next_infusion_mash_step_with_grain_adjunct DROP FOREIGN KEY FK_31C1B1DFC8785EEB');
-        $this->addSql('ALTER TABLE infusion_mash_steps_next_infusion_mash_step_without_grain_adjunct DROP FOREIGN KEY FK_6C801D2DC8785EEB');
+        $this->addSql('ALTER TABLE infusion_mash_steps_next_infusion_mash_step_wo_grain_adjunct DROP FOREIGN KEY FK_6C801D2DC8785EEB');
         $this->addSql('ALTER TABLE infusion_mash_steps DROP FOREIGN KEY FK_2C9C0AE6357B2592');
         $this->addSql('ALTER TABLE infusion_mash_steps DROP FOREIGN KEY FK_2C9C0AE65CF4E9F8');
         $this->addSql('ALTER TABLE infusion_mash_steps_next_infusion_mash_step_with_grain_adjunct DROP FOREIGN KEY FK_31C1B1DF8496B9AC');
-        $this->addSql('ALTER TABLE infusion_mash_steps_next_infusion_mash_step_without_grain_adjunct DROP FOREIGN KEY FK_6C801D2DEA346B2');
+        $this->addSql('ALTER TABLE infusion_mash_steps_next_infusion_mash_step_wo_grain_adjunct DROP FOREIGN KEY FK_6C801D2DEA346B2');
         $this->addSql('ALTER TABLE next_infusion_mash_step_with_grain_adjunct DROP FOREIGN KEY FK_9905EB3FACE989FE');
-        $this->addSql('ALTER TABLE next_infusion_mash_step_without_grain_adjunct DROP FOREIGN KEY FK_193F7E52ACE989FE');
+        $this->addSql('ALTER TABLE next_infusion_mash_step_wo_grain_adjunct DROP FOREIGN KEY FK_193F7E52ACE989FE');
         $this->addSql('DROP TABLE infusion_mash_steps');
         $this->addSql('DROP TABLE infusion_mash_steps_next_infusion_mash_step_with_grain_adjunct');
-        $this->addSql('DROP TABLE infusion_mash_steps_next_infusion_mash_step_without_grain_adjunct');
+        $this->addSql('DROP TABLE infusion_mash_steps_next_infusion_mash_step_wo_grain_adjunct');
         $this->addSql('DROP TABLE init_infusion');
         $this->addSql('DROP TABLE mash_volume');
         $this->addSql('DROP TABLE next_infusion_mash_step_with_grain_adjunct');
-        $this->addSql('DROP TABLE next_infusion_mash_step_without_grain_adjunct');
+        $this->addSql('DROP TABLE next_infusion_mash_step_wo_grain_adjunct');
         $this->addSql('DROP TABLE water_grain_ratio');
     }
 }

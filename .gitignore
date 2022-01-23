@@ -5,6 +5,7 @@ BeerOCraft.iml
 public/.htaccess
 var/*
 var/cache/
+var/cache/dev/
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
