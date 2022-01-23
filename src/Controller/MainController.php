@@ -22,9 +22,11 @@ class MainController extends AbstractController
         return $this->render('main/index.html.twig');
     }
 
+    // Route("/dashboard{reactRouting}", name="dashboard", requirements={"reactRouting"=".+"}, defaults={"reactRouting": null})
+
     /**
      * @Template("main/dasboard.html.twig")
-     * @Route("/dashboard{reactRouting}", name="dashboard", requirements={"reactRouting"=".+"}, defaults={"reactRouting": null})
+     * @Route("/dashboard", name="dashboard")
      */
     public function dashboard(): Response
     {
