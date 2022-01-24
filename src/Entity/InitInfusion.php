@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\InitInfusionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,13 +12,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=InitInfusionRepository::class)
  */
+#[ApiResource(
+    collectionOperations: [
+        'post'
+    ],
+    itemOperations: [
+
+    ]
+)]
 class InitInfusion
 {
    /**
    * @ORM\Id
    * @ORM\GeneratedValue
    * @ORM\Column(type="integer")
-   * @Assert\NotBlank()
    */
     private ?int $id;
 

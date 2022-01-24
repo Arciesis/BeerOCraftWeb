@@ -19,11 +19,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     ApiResource(
         collectionOperations: [
             'get',
-            'post'
+            'post',
         ],
         itemOperations: [
             'get',
-            'patch'
+            'patch',
         ],
         normalizationContext: ['groups' => 'read'],
         denormalizationContext: ['groups' => 'write']
@@ -45,7 +45,7 @@ class Mash
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * Assert\NotBlank()
      */
     private ?string $name;
 
@@ -53,29 +53,33 @@ class Mash
      * @ORM\Column(type="string", length=511)
      * @ApiProperty(identifier=true)
      * @Gedmo\Slug(fields={"slug"})
-     * @Assert\NotBlank()
-     * @Groups("read")
+     *
      */
-    private ?string $slug;
+    private $slug;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Choice("infusion", "decoction")
+     * Assert\NotBlank()
+     * Assert\Choice("infusion", "decoction")
      */
     private ?string $type;
 
     /**
      * @ORM\ManyToOne(targetEntity=InfusionMashSteps::class)
-     * @Assert\NotNull()
      */
     private ?InfusionMashSteps $infusionMashSteps;
 
     /**
      * @ORM\ManyToOne(targetEntity=DecoctionMashSteps::class)
-     * @Assert\NotNull()
      */
     private ?DecoctionMashSteps $decoctionMashSteps;
+
+/*    public function __construct(string $name, string $slug, string $type)
+    {
+        $this->name = $name;
+        $this->slug = $slug;
+        $this->type = $type;
+    }*/
 
     public function getId(): ?int
     {
@@ -94,6 +98,24 @@ class Mash
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string|null $slug
+     */
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+
+
     public function getType(): ?string
     {
         return $this->type;
@@ -108,7 +130,9 @@ class Mash
     {
         if (in_array(strtolower(trim($type)), self::TYPE_AVAILABLE)) {
             $this->type = $type;
-        } else throw new MashTypeException('The selectionned type isn\'t approved');
+        } else {
+            throw new MashTypeException('The selectionned type isn\'t approved');
+        }
 
         return $this;
     }

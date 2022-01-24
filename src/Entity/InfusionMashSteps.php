@@ -11,7 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=InfusionMashStepsRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: [
+        'post'
+    ],
+    itemOperations: [
+
+    ]
+)]
 class InfusionMashSteps
 {
     /**

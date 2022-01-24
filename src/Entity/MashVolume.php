@@ -2,13 +2,27 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MashVolumeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MashVolumeRepository::class)
  */
+#[ApiResource(
+    collectionOperations: [
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:mashVolume']
+            ]
+        ]
+    ],
+    itemOperations: [
+    ],
+)]
 class MashVolume
 {
     /**
@@ -21,18 +35,19 @@ class MashVolume
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:mashVolume")
      */
     private ?float $massGrainInMash;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:mashVolume")
      */
     private ?float $waterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
-     * @Assert\NotBlank()
      */
     private ?float $mashVolume;
 
@@ -76,4 +91,10 @@ class MashVolume
 
         return $this;
     }
+
+    /*#[Groups("compute:mash:volume")]
+    public function comuteMashVolume(): void
+    {
+        $this->setMashVolume($this->waterGrainRatio * ($this->massGrainInMash * 0.667));
+    }*/
 }

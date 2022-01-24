@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\WaterGrainRatioRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -8,6 +9,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=WaterGrainRatioRepository::class)
  */
+#[ApiResource(
+    collectionOperations: [
+        'post'
+    ],
+    itemOperations: [
+
+    ]
+)]
 class WaterGrainRatio
 {
     /**
