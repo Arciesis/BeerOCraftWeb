@@ -4,6 +4,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\WaterGrainRatioRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,10 +12,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     collectionOperations: [
-        'post'
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:waterGrainRatio']
+            ]
+        ]
     ],
     itemOperations: [
-
+        'get'
     ]
 )]
 class WaterGrainRatio
@@ -29,24 +34,26 @@ class WaterGrainRatio
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:waterGrainRatio")
      */
     private ?float $initMashTemp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:waterGrainRatio")
      */
     private ?float $initMashDryGrain;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:waterGrainRatio")
      */
     private ?float $initWaterVolume;
 
     /**
      * @ORM\Column(type="float")
-     * @Assert\NotBlank()
      */
     private ?float $initWaterGrainRatio;
 
