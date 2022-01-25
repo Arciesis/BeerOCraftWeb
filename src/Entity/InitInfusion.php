@@ -7,6 +7,7 @@ use App\Repository\InitInfusionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,10 +15,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     collectionOperations: [
-        'post'
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:initInfusion']
+            ]
+        ]
     ],
     itemOperations: [
-
+        'get'
     ]
 )]
 class InitInfusion
@@ -32,18 +37,21 @@ class InitInfusion
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:initInfusion")
      */
     private ?float $initGrainTemp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:initInfusion")
      */
     private ?float $wantedMashTemp;
 
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:initInfusion")
      */
     private ?float $waterGrainRatio;
 
@@ -55,22 +63,23 @@ class InitInfusion
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
+     * @Groups("post:initInfusion")
      */
     private ?float $time;
 
     /**
      * @ORM\OneToMany(targetEntity=InfusionMashSteps::class, mappedBy="initInfusion", orphanRemoval=true)
      */
-    private ArrayCollection $relatedMashStep;
+    private Collection $relatedInfusionMashStep;
 
     /**
      * @ORM\OneToMany(targetEntity=DecoctionMashSteps::class, mappedBy="initInfusion")
      */
-    private ArrayCollection $relatedDecoctionMashSteps;
+    private Collection $relatedDecoctionMashSteps;
 
     public function __construct()
     {
-        $this->relatedMashStep = new ArrayCollection();
+        $this->relatedInfusionMashStep = new ArrayCollection();
         $this->relatedDecoctionMashSteps = new ArrayCollection();
     }
 
@@ -142,15 +151,15 @@ class InitInfusion
     /**
      * @return Collection|InfusionMashSteps[]
      */
-    public function getRelatedMashStep(): Collection
+    public function getRelatedInfusionMashStep(): Collection
     {
-        return $this->relatedMashStep;
+        return $this->relatedInfusionMashStep;
     }
 
     public function addRelatedMashStep(InfusionMashSteps $relatedMashStep): self
     {
-        if (!$this->relatedMashStep->contains($relatedMashStep)) {
-            $this->relatedMashStep[] = $relatedMashStep;
+        if (!$this->relatedInfusionMashStep->contains($relatedMashStep)) {
+            $this->relatedInfusionMashStep[] = $relatedMashStep;
             $relatedMashStep->setInitInfusion($this);
         }
 
@@ -159,7 +168,7 @@ class InitInfusion
 
     public function removeRelatedMashStep(InfusionMashSteps $relatedMashStep): self
     {
-        if ($this->relatedMashStep->removeElement($relatedMashStep)) {
+        if ($this->relatedInfusionMashStep->removeElement($relatedMashStep)) {
             // set the owning side to null (unless already changed)
             if ($relatedMashStep->getInitInfusion() === $this) {
                 $relatedMashStep->setInitInfusion(null);

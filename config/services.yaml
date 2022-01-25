@@ -29,3 +29,7 @@ services:
             - {name: doctrine.event_subscriber, connection: default}
         calls:
             - [setAnnotationReader,["@annotation_reader"]]
+
+    App\DataPersister\IniInfusionDataPersister:
+        bind:
+            $decoratedDataPersister: '@api_platform.doctrine.orm.data_persister'
