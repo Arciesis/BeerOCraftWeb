@@ -33,3 +33,7 @@ services:
     App\DataPersister\IniInfusionDataPersister:
         bind:
             $decoratedDataPersister: '@api_platform.doctrine.orm.data_persister'
+
+    App\DataPersister\NextInfusionMashStepWithoutGrainAdjunctDataPersister:
+        bind:
+            $decoratedDataPersister: '@api_platform.doctrine.orm.data_persister'

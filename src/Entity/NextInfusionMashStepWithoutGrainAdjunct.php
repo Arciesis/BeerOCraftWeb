@@ -7,16 +7,21 @@ use App\Repository\NextInfusionMashStepWithoutGrainAdjunctRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NextInfusionMashStepWithoutGrainAdjunctRepository::class)
  */
 #[ApiResource(
     collectionOperations: [
-        'post'
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:nextInfusionStepWithoutGrainAdjunct']
+            ]
+        ]
     ],
     itemOperations: [
-
+        'get'
     ]
 )]
 class NextInfusionMashStepWithoutGrainAdjunct
@@ -31,38 +36,42 @@ class NextInfusionMashStepWithoutGrainAdjunct
     /**
      * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("post:nextInfusionStepWithoutGrainAdjunct")
      */
     private ?WaterGrainRatio $waterGrainRatioId;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithoutGrainAdjunct")
      */
-    private $waterAdjunctTemp;
+    private float $waterAdjunctTemp;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithoutGrainAdjunct")
+     */
+    private float $wantedTempAtNextStep;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $wantedTempAtNextStep;
+    private float $waterVolumeToAdd;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $waterVolumeToAdd;
+    private float $newWaterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithoutGrainAdjunct")
      */
-    private $newWaterGrainRatio;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $time;
+    private float $time;
 
     /**
      * @ORM\ManyToMany(targetEntity=InfusionMashSteps::class, mappedBy="mashStepsWithoutAdjunct")
      */
-    private $relatedInfusionMashSteps;
+    private Collection $relatedInfusionMashSteps;
 
     public function __construct()
     {
