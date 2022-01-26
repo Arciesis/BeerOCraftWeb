@@ -3,6 +3,10 @@ vendor/
 .env
 BeerOCraft.iml
 public/.htaccess
+
+config/jwt/private.pem
+/config/jwt/public.pem
+
 var/*
 var/cache/*
 var/cache/dev/*
@@ -20,3 +24,4 @@ var/cache/dev/Symfony/Config/Doctrine/Twig/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+

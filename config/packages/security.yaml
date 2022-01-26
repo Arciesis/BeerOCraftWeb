@@ -18,12 +18,31 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            lazy: true
-            provider: app_user_provider
-            custom_authenticator: App\Security\MyCustomAuthenticator
-            logout:
-                path: app_logout
+        login:
+            pattern: ^/dashboard/login
+            stateless: true
+            json_login:
+                check_path: /dashboard/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/dashboard
+            stateless: true
+            # anonymous: true
+            jwt: ~
+
+#        main:
+#            anonymous: true
+#            lazy: true
+#            provider: app_user_provider
+
+            # previous authentication
+            # lazy: true
+            # provider: app_user_provider
+            # custom_authenticator: App\Security\MyCustomAuthenticator
+            # logout:
+            #     path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -42,3 +61,8 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/dashboard/login, roles: PUBLIC_ACCES }
+        - { path: ^/dashboard/docs,  roles: PUBLIC_ACCESS }
+        - { path: ^/dashboard,       roles: IS_AUTHENTICATED_FULLY }
+
+

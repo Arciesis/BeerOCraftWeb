@@ -40,7 +40,7 @@ class InfusionMashSteps
     private ?MashVolume $massVolumeEstimation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=InitInfusion::class, inversedBy="relatedMashStep")
+     * @ORM\ManyToOne(targetEntity=InitInfusion::class, inversedBy="relatedInfusionMashStep")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?InitInfusion $initInfusion;
@@ -49,14 +49,14 @@ class InfusionMashSteps
      * @ORM\ManyToMany(targetEntity=NextInfusionMashStepWithGrainAdjunct::class, inversedBy="relatedInfusionMashSteps")
      *
      */
-    private ?ArrayCollection $mashStepWithAdjunct;
+    private Collection $mashStepWithAdjunct;
 
     /**
      * @ORM\ManyToMany(targetEntity=NextInfusionMashStepWithoutGrainAdjunct::class, inversedBy="relatedInfusionMashSteps")
      * @ORM\JoinTable(name="infusion_mash_steps_next_infusion_mash_step_wo_grain_adjunct")
 
      */
-    private ?ArrayCollection $mashStepsWithoutAdjunct;
+    private Collection $mashStepsWithoutAdjunct;
 
     /**
      * @ORM\Column(type="float")
