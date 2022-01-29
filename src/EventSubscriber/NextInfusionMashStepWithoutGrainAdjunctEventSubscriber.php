@@ -17,7 +17,7 @@ class NextInfusionMashStepWithoutGrainAdjunctEventSubscriber implements EventSub
     public static function getSubscribedEvents()
     {
         return [
-          KernelEvents::VIEW => ['computeValues', EventPriorities::PRE_WRITE],
+            KernelEvents::VIEW => ['computeValues', EventPriorities::PRE_WRITE],
         ];
     }
 
@@ -26,11 +26,36 @@ class NextInfusionMashStepWithoutGrainAdjunctEventSubscriber implements EventSub
         // dd($event->getControllerResult());
         if ($event->getControllerResult() instanceof NextInfusionMashStepWithoutGrainAdjunct) {
             $nextInfusionWithoutGrainAdjunct = $event->getControllerResult();
+            // is that correct ? or need I to put some things to the respository ?
             $relatedWaterGrainRatio = $nextInfusionWithoutGrainAdjunct->getWaterGrainRatioId();
-             number_format(
-                 ($nextInfusionWithoutGrainAdjunct->getwaterVolumeToAdd() + $relatedWaterGrainRatio->getIniTWaterVolume()) * 1000 /
-                 $relatedWaterGrainRatio->getInitMashDryGrain()
-                 ,3);
+
+            // (G23-G18)*(0,41*(G19/1000)+G20)/(G22-G23)
+            // = (wantedTempAtNextStep - initWaterTemp) * (0.41* (initMashDryGrain / 1000) + initWaterVolume) /
+            // (waterAdjunctTemp - wantedTempAtNextStep)
+
+            // Compute and populate the waterVolumeToAdd field
+            $nextInfusionWithoutGrainAdjunct->setWaterVolumeToAdd(
+                number_format(
+                    ($nextInfusionWithoutGrainAdjunct->getWantedTempAtNextStep(
+                        ) - $relatedWaterGrainRatio->getInitMashTemp(
+                        )) * (0.41 * ($relatedWaterGrainRatio->getInitMashDryGrain(
+                            ) / 1000) + $relatedWaterGrainRatio->getInitWaterVolume(
+                        )) / ($nextInfusionWithoutGrainAdjunct->getWaterAdjunctTemp(
+                        ) - $nextInfusionWithoutGrainAdjunct->getWantedTempAtNextStep())
+                )
+            );
+
+
+            // compute and populate the newWaterGrainRatio field
+            $nextInfusionWithoutGrainAdjunct->setNewWaterGrainRatio(
+                number_format(
+                    ($nextInfusionWithoutGrainAdjunct->getwaterVolumeToAdd(
+                        ) + $relatedWaterGrainRatio->getIniTWaterVolume()) * 1000 /
+                    $relatedWaterGrainRatio->getInitMashDryGrain()
+                    ,
+                    3
+                )
+            );
         }
     }
 }

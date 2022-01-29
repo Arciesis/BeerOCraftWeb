@@ -34,8 +34,14 @@ class NextInfusionMashStepWithoutGrainAdjunct
     private ?int $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
+     *
+     *
+     * // ManyToMany relation not sure it's correct tho
+     * // ORM\JoinTable(name="next_infusion_mash_step_without_grain_adjunct_water_grain_ratio",
+     * //     joinColumns={@ORM\JoinColumn(name="next_infusion_mash_step_without_grain_adjunct_water_grain_ratio_id", referencedColumnName="id", nullable=false)},
+     * //     inverseJoinColumns={@ORM\JoinColumn(name="water_grain_ratio_id", referencedColumnName="id", nullable=false)}
+     * )
      * @Groups("post:nextInfusionStepWithoutGrainAdjunct")
      */
     private ?WaterGrainRatio $waterGrainRatioId;

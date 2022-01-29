@@ -29,7 +29,7 @@ class NextInfusionMashStepWithGrainAdjunct
     private ?int $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private ?WaterGrainRatio $waterGrainRatioId;
@@ -156,9 +156,9 @@ class NextInfusionMashStepWithGrainAdjunct
         return $this;
     }
 
-    public function getNewWaterGrainRatio(): ?float
+    public function getNewWaterGrainRatio(): ?WaterGrainRatio
     {
-        return $this->newWaterGrainRatio;
+        return $this->waterGrainRatioId;
     }
 
     public function setNewWaterGrainRatio(float $newWaterGrainRatio): self
