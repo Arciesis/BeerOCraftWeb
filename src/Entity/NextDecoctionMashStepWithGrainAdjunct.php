@@ -7,20 +7,31 @@ use App\Repository\NextDecoctionMashStepWithGrainAdjunctRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NextDecoctionMashStepWithGrainAdjunctRepository::class)
  */
 #[ApiResource(
     collectionOperations: [
-        'post'
+        'post' => [
+            'denormalization_context' => [
+            'groups' => ['post:nextDecoctionMashStepWithGrainAdjunct']
+            ]
+        ]
     ],
     itemOperations: [
-
+        'get'
     ]
 )]
 class NextDecoctionMashStepWithGrainAdjunct
 {
+
+    public const  WATER_HEAT_CAPACITY = 4200;
+    public const GRAIN_HEAT_CAPACITY = 1714;
+    public const CELSIUS_TO_KELVIN_ADJUNCT = 273.15;
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -29,55 +40,66 @@ class NextDecoctionMashStepWithGrainAdjunct
     private ?int $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?WaterGrainRatio $waterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $wantedTempNextStep;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $decoctionWaterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $waterTempToAdd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $decoctionBoilTime;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $evaporationRate;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $grainMassToAdd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $grainTempToAdd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
     private ?float $waterVolumeToAdd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
      */
-    private ?float $waterBoilTime;
+    private ?float $tempOfBrewWaterAdjunct;
 
     /**
      * @ORM\Column(type="float")
@@ -90,14 +112,9 @@ class NextDecoctionMashStepWithGrainAdjunct
     private ?float $newWaterGrainRatio;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private ?float $time;
-
-    /**
      * @ORM\ManyToMany(targetEntity=DecoctionMashSteps::class, mappedBy="mashStepWithAdjunct")
      */
-    private ArrayCollection $relatedDecoctionMashSteps;
+    private Collection $relatedDecoctionMashSteps;
 
     public function __construct()
     {
@@ -217,14 +234,14 @@ class NextDecoctionMashStepWithGrainAdjunct
         return $this;
     }
 
-    public function getWaterBoilTime(): ?float
+    public function getTempOfBrewWaterAdjunct(): ?float
     {
-        return $this->waterBoilTime;
+        return $this->tempOfBrewWaterAdjunct;
     }
 
-    public function setWaterBoilTime(float $waterBoilTime): self
+    public function setTempOfBrewWaterAdjunct(float $tempOfBrewWaterAdjunct): self
     {
-        $this->waterBoilTime = $waterBoilTime;
+        $this->tempOfBrewWaterAdjunct = $tempOfBrewWaterAdjunct;
 
         return $this;
     }
@@ -249,18 +266,6 @@ class NextDecoctionMashStepWithGrainAdjunct
     public function setNewWaterGrainRatio(float $newWaterGrainRatio): self
     {
         $this->newWaterGrainRatio = $newWaterGrainRatio;
-
-        return $this;
-    }
-
-    public function getTime(): ?float
-    {
-        return $this->time;
-    }
-
-    public function setTime(float $time): self
-    {
-        $this->time = $time;
 
         return $this;
     }
