@@ -7,20 +7,28 @@ use App\Repository\NextDecoctionMashStepWithoutGrainAdjunctRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NextDecoctionMashStepWithoutGrainAdjunctRepository::class)
  */
 #[ApiResource(
     collectionOperations: [
-        'post'
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:nextDecoctionMashStepWithoutGrainAdjunct']
+            ]
+        ]
     ],
     itemOperations: [
-
+        'get'
     ]
 )]
 class NextDecoctionMashStepWithoutGrainAdjunct
 {
+    public const WATER_HEAT_CAPACITY = 4200;
+    public const GRAIN_HEAT_CAPACITY = 1714;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,31 +39,37 @@ class NextDecoctionMashStepWithoutGrainAdjunct
     /**
      * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
      */
     private ?WaterGrainRatio $waterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
      */
     private ?float $wantedTempNextStep;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
      */
     private ?float $decoctionWaterGrainRatio;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
      */
     private ?float $waterTempToadd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
      */
     private ?float $decoctionBoilTime;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
      */
     private ?float $evaporationRate;
 
@@ -65,14 +79,9 @@ class NextDecoctionMashStepWithoutGrainAdjunct
     private ?float $decoctionVolumeToTake;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private ?float $time;
-
-    /**
      * @ORM\ManyToMany(targetEntity=DecoctionMashSteps::class, mappedBy="mashStepWithoutGrainAdjunct")
      */
-    private ArrayCollection $relatedDecoctionMashSteps;
+    private Collection $relatedDecoctionMashSteps;
 
     public function __construct()
     {
@@ -164,18 +173,6 @@ class NextDecoctionMashStepWithoutGrainAdjunct
     public function setDecoctionVolumeToTake(float $decoctionVolumeToTake): self
     {
         $this->decoctionVolumeToTake = $decoctionVolumeToTake;
-
-        return $this;
-    }
-
-    public function getTime(): ?float
-    {
-        return $this->time;
-    }
-
-    public function setTime(float $time): self
-    {
-        $this->time = $time;
 
         return $this;
     }
