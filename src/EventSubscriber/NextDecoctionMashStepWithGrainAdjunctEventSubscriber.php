@@ -65,7 +65,6 @@ class NextDecoctionMashStepWithGrainAdjunctEventSubscriber implements EventSubsc
 
             $nextDecoctionMashStepWithGrainAdjunct->setDecoctionVolumeToTake($result);
 
-            // (P32+P41)*1000/(P31+P39)
 
             $nextDecoctionMashStepWithGrainAdjunct->setNewWaterGrainRatio(
                 ($initWaterVolume + $waterVolumeToAdd) * 1000 / ($initMashDryGrain + $grainMassToAdd)
