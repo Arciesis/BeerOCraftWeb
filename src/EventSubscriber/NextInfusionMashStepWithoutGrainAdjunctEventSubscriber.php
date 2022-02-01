@@ -35,26 +35,19 @@ class NextInfusionMashStepWithoutGrainAdjunctEventSubscriber implements EventSub
 
             // Compute and populate the waterVolumeToAdd field
             $nextInfusionWithoutGrainAdjunct->setWaterVolumeToAdd(
-                number_format(
-                    ($nextInfusionWithoutGrainAdjunct->getWantedTempAtNextStep(
-                        ) - $relatedWaterGrainRatio->getInitMashTemp(
-                        )) * (0.41 * ($relatedWaterGrainRatio->getInitMashDryGrain(
-                            ) / 1000) + $relatedWaterGrainRatio->getInitWaterVolume(
-                        )) / ($nextInfusionWithoutGrainAdjunct->getWaterAdjunctTemp(
-                        ) - $nextInfusionWithoutGrainAdjunct->getWantedTempAtNextStep())
-                )
+                ($nextInfusionWithoutGrainAdjunct->getWantedTempAtNextStep() - $relatedWaterGrainRatio->getInitMashTemp(
+                    )) * (0.41 * ($relatedWaterGrainRatio->getInitMashDryGrain(
+                        ) / 1000) + $relatedWaterGrainRatio->getInitWaterVolume(
+                    )) / ($nextInfusionWithoutGrainAdjunct->getWaterAdjunctTemp(
+                    ) - $nextInfusionWithoutGrainAdjunct->getWantedTempAtNextStep())
             );
 
 
             // compute and populate the newWaterGrainRatio field
             $nextInfusionWithoutGrainAdjunct->setNewWaterGrainRatio(
-                number_format(
-                    ($nextInfusionWithoutGrainAdjunct->getwaterVolumeToAdd(
-                        ) + $relatedWaterGrainRatio->getIniTWaterVolume()) * 1000 /
-                    $relatedWaterGrainRatio->getInitMashDryGrain()
-                    ,
-                    3
-                )
+                ($nextInfusionWithoutGrainAdjunct->getwaterVolumeToAdd() + $relatedWaterGrainRatio->getIniTWaterVolume(
+                    )) * 1000 /
+                $relatedWaterGrainRatio->getInitMashDryGrain()
             );
         }
     }

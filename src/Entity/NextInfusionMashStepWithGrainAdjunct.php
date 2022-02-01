@@ -7,20 +7,30 @@ use App\Repository\NextInfusionMashStepWithGrainAdjunctRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NextInfusionMashStepWithGrainAdjunctRepository::class)
  */
 #[ApiResource(
     collectionOperations: [
-        'post'
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:nextInfusionStepWithtGrainAdjunct']
+            ]
+        ]
     ],
     itemOperations: [
-
+        'get'
     ]
 )]
 class NextInfusionMashStepWithGrainAdjunct
 {
+    public const  WATER_HEAT_CAPACITY = 4200;
+    public const GRAIN_HEAT_CAPACITY = 1714;
+    public const CELSIUS_TO_KELVIN_ADJUNCT = 273.15;
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -30,27 +40,31 @@ class NextInfusionMashStepWithGrainAdjunct
 
     /**
      * @ORM\ManyToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @Groups("post:nextInfusionStepWithtGrainAdjunct")
      */
     private ?WaterGrainRatio $waterGrainRatioId;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithtGrainAdjunct")
      */
     private ?float $grainMassToAdd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithtGrainAdjunct")
      */
     private ?float $tempOfGrainToAdd;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithtGrainAdjunct")
      */
-    private ?float $wantedTempNextStep;
+    private ?float $wantedTempAtNextStep;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithtGrainAdjunct")
      */
     private ?float $waterTempToAdd;
 
@@ -66,13 +80,14 @@ class NextInfusionMashStepWithGrainAdjunct
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("post:nextInfusionStepWithtGrainAdjunct")
      */
     private ?float $time;
 
     /**
      * @ORM\ManyToMany(targetEntity=InfusionMashSteps::class, mappedBy="mashStepWithAdjunct")
      */
-    private $relatedInfusionMashSteps;
+    private Collection $relatedInfusionMashSteps;
 
     public function __construct()
     {
@@ -120,14 +135,14 @@ class NextInfusionMashStepWithGrainAdjunct
         return $this;
     }
 
-    public function getWantedTempNextStep(): ?float
+    public function getWantedTempAtNextStep(): ?float
     {
-        return $this->wantedTempNextStep;
+        return $this->wantedTempAtNextStep;
     }
 
-    public function setWantedTempNextStep(float $wantedTempNextStep): self
+    public function setWantedTempAtNextStep(float $wantedTempAtNextStep): self
     {
-        $this->wantedTempNextStep = $wantedTempNextStep;
+        $this->wantedTempAtNextStep = $wantedTempAtNextStep;
 
         return $this;
     }
@@ -156,9 +171,9 @@ class NextInfusionMashStepWithGrainAdjunct
         return $this;
     }
 
-    public function getNewWaterGrainRatio(): ?WaterGrainRatio
+    public function getNewWaterGrainRatio(): ?float
     {
-        return $this->waterGrainRatioId;
+        return $this->newWaterGrainRatio;
     }
 
     public function setNewWaterGrainRatio(float $newWaterGrainRatio): self
@@ -206,4 +221,6 @@ class NextInfusionMashStepWithGrainAdjunct
 
         return $this;
     }
+
+
 }
