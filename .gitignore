@@ -7,7 +7,7 @@ public/.htaccess
 config/jwt/private.pem
 config/jwt/public.pem
 
-var/
+var/cache/dev/
 
 
 ###> symfony/webpack-encore-bundle ###
