@@ -2,21 +2,18 @@
 
 namespace Symfony\Config\Framework\Messenger\BusConfig;
 
-
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class MiddlewareConfig 
 {
     private $id;
     private $arguments;
-    
+    private $_usedProperties = [];
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -24,53 +21,54 @@ class MiddlewareConfig
      */
     public function id($value): self
     {
+        $this->_usedProperties['id'] = true;
         $this->id = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @param ParamConfigurator|list<mixed|ParamConfigurator> $value
      * @return $this
      */
     public function arguments($value): self
     {
+        $this->_usedProperties['arguments'] = true;
         $this->arguments = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['id'])) {
+        if (array_key_exists('id', $value)) {
+            $this->_usedProperties['id'] = true;
             $this->id = $value['id'];
             unset($value['id']);
         }
-    
-        if (isset($value['arguments'])) {
+
+        if (array_key_exists('arguments', $value)) {
+            $this->_usedProperties['arguments'] = true;
             $this->arguments = $value['arguments'];
             unset($value['arguments']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->id) {
+        if (isset($this->_usedProperties['id'])) {
             $output['id'] = $this->id;
         }
-        if (null !== $this->arguments) {
+        if (isset($this->_usedProperties['arguments'])) {
             $output['arguments'] = $this->arguments;
         }
-    
+
         return $output;
     }
-    
 
 }

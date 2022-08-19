@@ -7,11 +7,8 @@ require_once __DIR__.\DIRECTORY_SEPARATOR.'RegionConfig'.\DIRECTORY_SEPARATOR.'C
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Loader\ParamConfigurator;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class RegionConfig 
 {
@@ -22,18 +19,30 @@ class RegionConfig
     private $lifetime;
     private $service;
     private $name;
-    
-    public function cacheDriver(array $value = []): \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig
+    private $_usedProperties = [];
+
+    /**
+     * @return \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig|$this
+     */
+    public function cacheDriver($value = [])
     {
-        if (null === $this->cacheDriver) {
+        if (!\is_array($value)) {
+            $this->_usedProperties['cacheDriver'] = true;
+            $this->cacheDriver = $value;
+
+            return $this;
+        }
+
+        if (!$this->cacheDriver instanceof \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig) {
+            $this->_usedProperties['cacheDriver'] = true;
             $this->cacheDriver = new \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig($value);
-        } elseif ([] !== $value) {
+        } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "cacheDriver()" has already been initialized. You cannot pass values the second time you call cacheDriver().');
         }
-    
+
         return $this->cacheDriver;
     }
-    
+
     /**
      * @default '%kernel.cache_dir%/doctrine/orm/slc/filelock'
      * @param ParamConfigurator|mixed $value
@@ -41,11 +50,12 @@ class RegionConfig
      */
     public function lockPath($value): self
     {
+        $this->_usedProperties['lockPath'] = true;
         $this->lockPath = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default 60
      * @param ParamConfigurator|mixed $value
@@ -53,11 +63,12 @@ class RegionConfig
      */
     public function lockLifetime($value): self
     {
+        $this->_usedProperties['lockLifetime'] = true;
         $this->lockLifetime = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default 'default'
      * @param ParamConfigurator|mixed $value
@@ -65,11 +76,12 @@ class RegionConfig
      */
     public function type($value): self
     {
+        $this->_usedProperties['type'] = true;
         $this->type = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default 0
      * @param ParamConfigurator|mixed $value
@@ -77,11 +89,12 @@ class RegionConfig
      */
     public function lifetime($value): self
     {
+        $this->_usedProperties['lifetime'] = true;
         $this->lifetime = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -89,11 +102,12 @@ class RegionConfig
      */
     public function service($value): self
     {
+        $this->_usedProperties['service'] = true;
         $this->service = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -101,82 +115,87 @@ class RegionConfig
      */
     public function name($value): self
     {
+        $this->_usedProperties['name'] = true;
         $this->name = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['cache_driver'])) {
-            $this->cacheDriver = new \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig($value['cache_driver']);
+        if (array_key_exists('cache_driver', $value)) {
+            $this->_usedProperties['cacheDriver'] = true;
+            $this->cacheDriver = \is_array($value['cache_driver']) ? new \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig($value['cache_driver']) : $value['cache_driver'];
             unset($value['cache_driver']);
         }
-    
-        if (isset($value['lock_path'])) {
+
+        if (array_key_exists('lock_path', $value)) {
+            $this->_usedProperties['lockPath'] = true;
             $this->lockPath = $value['lock_path'];
             unset($value['lock_path']);
         }
-    
-        if (isset($value['lock_lifetime'])) {
+
+        if (array_key_exists('lock_lifetime', $value)) {
+            $this->_usedProperties['lockLifetime'] = true;
             $this->lockLifetime = $value['lock_lifetime'];
             unset($value['lock_lifetime']);
         }
-    
-        if (isset($value['type'])) {
+
+        if (array_key_exists('type', $value)) {
+            $this->_usedProperties['type'] = true;
             $this->type = $value['type'];
             unset($value['type']);
         }
-    
-        if (isset($value['lifetime'])) {
+
+        if (array_key_exists('lifetime', $value)) {
+            $this->_usedProperties['lifetime'] = true;
             $this->lifetime = $value['lifetime'];
             unset($value['lifetime']);
         }
-    
-        if (isset($value['service'])) {
+
+        if (array_key_exists('service', $value)) {
+            $this->_usedProperties['service'] = true;
             $this->service = $value['service'];
             unset($value['service']);
         }
-    
-        if (isset($value['name'])) {
+
+        if (array_key_exists('name', $value)) {
+            $this->_usedProperties['name'] = true;
             $this->name = $value['name'];
             unset($value['name']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->cacheDriver) {
-            $output['cache_driver'] = $this->cacheDriver->toArray();
+        if (isset($this->_usedProperties['cacheDriver'])) {
+            $output['cache_driver'] = $this->cacheDriver instanceof \Symfony\Config\Doctrine\Orm\EntityManagerConfig\SecondLevelCache\RegionConfig\CacheDriverConfig ? $this->cacheDriver->toArray() : $this->cacheDriver;
         }
-        if (null !== $this->lockPath) {
+        if (isset($this->_usedProperties['lockPath'])) {
             $output['lock_path'] = $this->lockPath;
         }
-        if (null !== $this->lockLifetime) {
+        if (isset($this->_usedProperties['lockLifetime'])) {
             $output['lock_lifetime'] = $this->lockLifetime;
         }
-        if (null !== $this->type) {
+        if (isset($this->_usedProperties['type'])) {
             $output['type'] = $this->type;
         }
-        if (null !== $this->lifetime) {
+        if (isset($this->_usedProperties['lifetime'])) {
             $output['lifetime'] = $this->lifetime;
         }
-        if (null !== $this->service) {
+        if (isset($this->_usedProperties['service'])) {
             $output['service'] = $this->service;
         }
-        if (null !== $this->name) {
+        if (isset($this->_usedProperties['name'])) {
             $output['name'] = $this->name;
         }
-    
+
         return $output;
     }
-    
 
 }

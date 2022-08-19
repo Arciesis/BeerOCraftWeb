@@ -2,21 +2,18 @@
 
 namespace Symfony\Config\Framework\Form;
 
-
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class CsrfProtectionConfig 
 {
     private $enabled;
     private $fieldName;
-    
+    private $_usedProperties = [];
+
     /**
      * @default null
      * @param ParamConfigurator|bool $value
@@ -24,11 +21,12 @@ class CsrfProtectionConfig
      */
     public function enabled($value): self
     {
+        $this->_usedProperties['enabled'] = true;
         $this->enabled = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default '_token'
      * @param ParamConfigurator|mixed $value
@@ -36,42 +34,42 @@ class CsrfProtectionConfig
      */
     public function fieldName($value): self
     {
+        $this->_usedProperties['fieldName'] = true;
         $this->fieldName = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['enabled'])) {
+        if (array_key_exists('enabled', $value)) {
+            $this->_usedProperties['enabled'] = true;
             $this->enabled = $value['enabled'];
             unset($value['enabled']);
         }
-    
-        if (isset($value['field_name'])) {
+
+        if (array_key_exists('field_name', $value)) {
+            $this->_usedProperties['fieldName'] = true;
             $this->fieldName = $value['field_name'];
             unset($value['field_name']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->enabled) {
+        if (isset($this->_usedProperties['enabled'])) {
             $output['enabled'] = $this->enabled;
         }
-        if (null !== $this->fieldName) {
+        if (isset($this->_usedProperties['fieldName'])) {
             $output['field_name'] = $this->fieldName;
         }
-    
+
         return $output;
     }
-    
 
 }

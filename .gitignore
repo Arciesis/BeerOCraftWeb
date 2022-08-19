@@ -5,17 +5,9 @@ BeerOCraft.iml
 public/.htaccess
 
 config/jwt/private.pem
-/config/jwt/public.pem
+config/jwt/public.pem
 
-var/*
-var/cache/*
-var/cache/dev/*
-var/cache/dev/Symfony/Config/Doctrine
-var/cache/dev/Symfony/Config/Doctrine/Dbal/
-var/cache/dev/Symfony/Config/Doctrine/Orm/
-var/cache/dev/Symfony/Config/DoctrineMigrations/
-var/cache/dev/Symfony/Config/Framework/
-var/cache/dev/Symfony/Config/Doctrine/Twig/
+var/
 
 
 ###> symfony/webpack-encore-bundle ###
@@ -25,3 +17,17 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###

@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BoilerEquipmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -65,6 +67,16 @@ class BoilerEquipment
      *
      */
     private User $owner;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BeerRecipe::class, mappedBy="equipment")
+     */
+    private $beerRecipe;
+
+    public function __construct()
+    {
+        $this->beerRecipe = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -167,6 +179,36 @@ class BoilerEquipment
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipe(): Collection
+    {
+        return $this->beerRecipe;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipe->contains($beerRecepe)) {
+            $this->beerRecipe[] = $beerRecepe;
+            $beerRecepe->setEquipment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipe->removeElement($beerRecepe)) {
+            // set the owning side to null (unless already changed)
+            if ($beerRecepe->getEquipment() === $this) {
+                $beerRecepe->setEquipment(null);
+            }
+        }
 
         return $this;
     }

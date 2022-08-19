@@ -2,22 +2,19 @@
 
 namespace Symfony\Config\Framework\Workflows\WorkflowsConfig;
 
-
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class MarkingStoreConfig 
 {
     private $type;
     private $property;
     private $service;
-    
+    private $_usedProperties = [];
+
     /**
      * @default null
      * @param ParamConfigurator|'method' $value
@@ -25,11 +22,12 @@ class MarkingStoreConfig
      */
     public function type($value): self
     {
+        $this->_usedProperties['type'] = true;
         $this->type = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default 'marking'
      * @param ParamConfigurator|mixed $value
@@ -37,11 +35,12 @@ class MarkingStoreConfig
      */
     public function property($value): self
     {
+        $this->_usedProperties['property'] = true;
         $this->property = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -49,50 +48,51 @@ class MarkingStoreConfig
      */
     public function service($value): self
     {
+        $this->_usedProperties['service'] = true;
         $this->service = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['type'])) {
+        if (array_key_exists('type', $value)) {
+            $this->_usedProperties['type'] = true;
             $this->type = $value['type'];
             unset($value['type']);
         }
-    
-        if (isset($value['property'])) {
+
+        if (array_key_exists('property', $value)) {
+            $this->_usedProperties['property'] = true;
             $this->property = $value['property'];
             unset($value['property']);
         }
-    
-        if (isset($value['service'])) {
+
+        if (array_key_exists('service', $value)) {
+            $this->_usedProperties['service'] = true;
             $this->service = $value['service'];
             unset($value['service']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->type) {
+        if (isset($this->_usedProperties['type'])) {
             $output['type'] = $this->type;
         }
-        if (null !== $this->property) {
+        if (isset($this->_usedProperties['property'])) {
             $output['property'] = $this->property;
         }
-        if (null !== $this->service) {
+        if (isset($this->_usedProperties['service'])) {
             $output['service'] = $this->service;
         }
-    
+
         return $output;
     }
-    
 
 }

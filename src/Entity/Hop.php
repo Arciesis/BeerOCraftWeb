@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\HopRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Exception\IngredientTypeException;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -77,6 +79,16 @@ class Hop
      * @ORM\Column(type="string", length=255)
      */
     private $type;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=BeerRecipe::class, mappedBy="hops")
+     */
+    private $beerRecipes;
+
+    public function __construct()
+    {
+        $this->beerRecipes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -204,5 +216,32 @@ class Hop
         return $this;
 
 
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipes(): Collection
+    {
+        return $this->beerRecipes;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipes->contains($beerRecepe)) {
+            $this->beerRecipes[] = $beerRecepe;
+            $beerRecepe->addHop($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipes->removeElement($beerRecepe)) {
+            $beerRecepe->removeHop($this);
+        }
+
+        return $this;
     }
 }

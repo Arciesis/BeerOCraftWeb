@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Exception\InvalidArgumentException;
 use App\Repository\BeerStyleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -103,6 +105,16 @@ class BeerStyle
      * @ORM\Column(type="smallint")
      */
     private $lovibond;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BeerRecipe::class, mappedBy="style")
+     */
+    private $beerRecipe;
+
+    public function __construct()
+    {
+        $this->beerRecipe = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -295,6 +307,36 @@ class BeerStyle
         if ($lovibond >= 0) {
             $this->lovibond = $lovibond;
         } else throw new InvalidArgumentException('Lovibond is lesser that zero');
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipe(): Collection
+    {
+        return $this->beerRecipe;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipe->contains($beerRecepe)) {
+            $this->beerRecipe[] = $beerRecepe;
+            $beerRecepe->setStyle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipe->removeElement($beerRecepe)) {
+            // set the owning side to null (unless already changed)
+            if ($beerRecepe->getStyle() === $this) {
+                $beerRecepe->setStyle(null);
+            }
+        }
 
         return $this;
     }

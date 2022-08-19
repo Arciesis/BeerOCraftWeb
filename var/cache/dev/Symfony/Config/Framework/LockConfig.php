@@ -2,21 +2,18 @@
 
 namespace Symfony\Config\Framework;
 
-
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class LockConfig 
 {
     private $enabled;
     private $resources;
-    
+    private $_usedProperties = [];
+
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -24,53 +21,54 @@ class LockConfig
      */
     public function enabled($value): self
     {
+        $this->_usedProperties['enabled'] = true;
         $this->enabled = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @param ParamConfigurator|array $value
      * @return $this
      */
     public function resource(string $name, $value): self
     {
+        $this->_usedProperties['resources'] = true;
         $this->resources[$name] = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['enabled'])) {
+        if (array_key_exists('enabled', $value)) {
+            $this->_usedProperties['enabled'] = true;
             $this->enabled = $value['enabled'];
             unset($value['enabled']);
         }
-    
-        if (isset($value['resources'])) {
+
+        if (array_key_exists('resources', $value)) {
+            $this->_usedProperties['resources'] = true;
             $this->resources = $value['resources'];
             unset($value['resources']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->enabled) {
+        if (isset($this->_usedProperties['enabled'])) {
             $output['enabled'] = $this->enabled;
         }
-        if (null !== $this->resources) {
+        if (isset($this->_usedProperties['resources'])) {
             $output['resources'] = $this->resources;
         }
-    
+
         return $output;
     }
-    
 
 }

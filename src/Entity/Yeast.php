@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exception\IngredientTypeException;
 use App\Repository\YeastRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use phpDocumentor\Reflection\Types\Self_;
@@ -54,6 +56,16 @@ class Yeast
      * @ApiProperty(identifier=true)
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BeerRecipe::class, mappedBy="yeast")
+     */
+    private $beerRecipes;
+
+    public function __construct()
+    {
+        $this->beerRecipes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,6 +129,36 @@ class Yeast
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipes(): Collection
+    {
+        return $this->beerRecipes;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipes->contains($beerRecepe)) {
+            $this->beerRecipes[] = $beerRecepe;
+            $beerRecepe->setYeast($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipes->removeElement($beerRecepe)) {
+            // set the owning side to null (unless already changed)
+            if ($beerRecepe->getYeast() === $this) {
+                $beerRecepe->setYeast(null);
+            }
+        }
 
         return $this;
     }

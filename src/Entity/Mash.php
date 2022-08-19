@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exception\MashTypeException;
 use App\Repository\MashRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -73,6 +75,16 @@ class Mash
      * @ORM\ManyToOne(targetEntity=DecoctionMashSteps::class)
      */
     private ?DecoctionMashSteps $decoctionMashSteps;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BeerRecipe::class, mappedBy="mash")
+     */
+    private $beerRecipes;
+
+    public function __construct()
+    {
+        $this->beerRecipes = new ArrayCollection();
+    }
 
 /*    public function __construct(string $name, string $slug, string $type)
     {
@@ -157,6 +169,36 @@ class Mash
     public function setDecoctionMashSteps(?DecoctionMashSteps $decoctionMashSteps): self
     {
         $this->decoctionMashSteps = $decoctionMashSteps;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipes(): Collection
+    {
+        return $this->beerRecipes;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipes->contains($beerRecepe)) {
+            $this->beerRecipes[] = $beerRecepe;
+            $beerRecepe->setMash($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipes->removeElement($beerRecepe)) {
+            // set the owning side to null (unless already changed)
+            if ($beerRecepe->getMash() === $this) {
+                $beerRecepe->setMash(null);
+            }
+        }
 
         return $this;
     }

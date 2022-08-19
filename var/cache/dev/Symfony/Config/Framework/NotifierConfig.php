@@ -7,11 +7,8 @@ require_once __DIR__.\DIRECTORY_SEPARATOR.'Notifier'.\DIRECTORY_SEPARATOR.'Admin
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class NotifierConfig 
 {
@@ -21,7 +18,8 @@ class NotifierConfig
     private $notificationOnFailedMessages;
     private $channelPolicy;
     private $adminRecipients;
-    
+    private $_usedProperties = [];
+
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -29,33 +27,36 @@ class NotifierConfig
      */
     public function enabled($value): self
     {
+        $this->_usedProperties['enabled'] = true;
         $this->enabled = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @param ParamConfigurator|mixed $value
      * @return $this
      */
     public function chatterTransport(string $name, $value): self
     {
+        $this->_usedProperties['chatterTransports'] = true;
         $this->chatterTransports[$name] = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @param ParamConfigurator|mixed $value
      * @return $this
      */
     public function texterTransport(string $name, $value): self
     {
+        $this->_usedProperties['texterTransports'] = true;
         $this->texterTransports[$name] = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -63,90 +64,97 @@ class NotifierConfig
      */
     public function notificationOnFailedMessages($value): self
     {
+        $this->_usedProperties['notificationOnFailedMessages'] = true;
         $this->notificationOnFailedMessages = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @param ParamConfigurator|array $value
      * @return $this
      */
     public function channelPolicy(string $name, $value): self
     {
+        $this->_usedProperties['channelPolicy'] = true;
         $this->channelPolicy[$name] = $value;
-    
+
         return $this;
     }
-    
+
     public function adminRecipient(array $value = []): \Symfony\Config\Framework\Notifier\AdminRecipientConfig
     {
+        $this->_usedProperties['adminRecipients'] = true;
+
         return $this->adminRecipients[] = new \Symfony\Config\Framework\Notifier\AdminRecipientConfig($value);
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['enabled'])) {
+        if (array_key_exists('enabled', $value)) {
+            $this->_usedProperties['enabled'] = true;
             $this->enabled = $value['enabled'];
             unset($value['enabled']);
         }
-    
-        if (isset($value['chatter_transports'])) {
+
+        if (array_key_exists('chatter_transports', $value)) {
+            $this->_usedProperties['chatterTransports'] = true;
             $this->chatterTransports = $value['chatter_transports'];
             unset($value['chatter_transports']);
         }
-    
-        if (isset($value['texter_transports'])) {
+
+        if (array_key_exists('texter_transports', $value)) {
+            $this->_usedProperties['texterTransports'] = true;
             $this->texterTransports = $value['texter_transports'];
             unset($value['texter_transports']);
         }
-    
-        if (isset($value['notification_on_failed_messages'])) {
+
+        if (array_key_exists('notification_on_failed_messages', $value)) {
+            $this->_usedProperties['notificationOnFailedMessages'] = true;
             $this->notificationOnFailedMessages = $value['notification_on_failed_messages'];
             unset($value['notification_on_failed_messages']);
         }
-    
-        if (isset($value['channel_policy'])) {
+
+        if (array_key_exists('channel_policy', $value)) {
+            $this->_usedProperties['channelPolicy'] = true;
             $this->channelPolicy = $value['channel_policy'];
             unset($value['channel_policy']);
         }
-    
-        if (isset($value['admin_recipients'])) {
+
+        if (array_key_exists('admin_recipients', $value)) {
+            $this->_usedProperties['adminRecipients'] = true;
             $this->adminRecipients = array_map(function ($v) { return new \Symfony\Config\Framework\Notifier\AdminRecipientConfig($v); }, $value['admin_recipients']);
             unset($value['admin_recipients']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->enabled) {
+        if (isset($this->_usedProperties['enabled'])) {
             $output['enabled'] = $this->enabled;
         }
-        if (null !== $this->chatterTransports) {
+        if (isset($this->_usedProperties['chatterTransports'])) {
             $output['chatter_transports'] = $this->chatterTransports;
         }
-        if (null !== $this->texterTransports) {
+        if (isset($this->_usedProperties['texterTransports'])) {
             $output['texter_transports'] = $this->texterTransports;
         }
-        if (null !== $this->notificationOnFailedMessages) {
+        if (isset($this->_usedProperties['notificationOnFailedMessages'])) {
             $output['notification_on_failed_messages'] = $this->notificationOnFailedMessages;
         }
-        if (null !== $this->channelPolicy) {
+        if (isset($this->_usedProperties['channelPolicy'])) {
             $output['channel_policy'] = $this->channelPolicy;
         }
-        if (null !== $this->adminRecipients) {
+        if (isset($this->_usedProperties['adminRecipients'])) {
             $output['admin_recipients'] = array_map(function ($v) { return $v->toArray(); }, $this->adminRecipients);
         }
-    
+
         return $output;
     }
-    
 
 }

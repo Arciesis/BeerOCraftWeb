@@ -6,50 +6,47 @@ require_once __DIR__.\DIRECTORY_SEPARATOR.'Storage'.\DIRECTORY_SEPARATOR.'TableS
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class StorageConfig 
 {
     private $tableStorage;
-    
+    private $_usedProperties = [];
+
     public function tableStorage(array $value = []): \Symfony\Config\DoctrineMigrations\Storage\TableStorageConfig
     {
         if (null === $this->tableStorage) {
+            $this->_usedProperties['tableStorage'] = true;
             $this->tableStorage = new \Symfony\Config\DoctrineMigrations\Storage\TableStorageConfig($value);
-        } elseif ([] !== $value) {
+        } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "tableStorage()" has already been initialized. You cannot pass values the second time you call tableStorage().');
         }
-    
+
         return $this->tableStorage;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['table_storage'])) {
+        if (array_key_exists('table_storage', $value)) {
+            $this->_usedProperties['tableStorage'] = true;
             $this->tableStorage = new \Symfony\Config\DoctrineMigrations\Storage\TableStorageConfig($value['table_storage']);
             unset($value['table_storage']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->tableStorage) {
+        if (isset($this->_usedProperties['tableStorage'])) {
             $output['table_storage'] = $this->tableStorage->toArray();
         }
-    
+
         return $output;
     }
-    
 
 }

@@ -6,7 +6,10 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exception\IngredientTypeException;
 use App\Repository\FermentableRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -119,6 +122,16 @@ class Fermentable
      * @ORM\Column(type="string", length=255)
      */
     private $type;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=BeerRecipe::class, mappedBy="fermentables")
+     */
+    private $beerRecipes;
+
+    public function __construct()
+    {
+        $this->beerRecipes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -338,7 +351,34 @@ class Fermentable
     {
         if (in_array($type, self::TYPE)){
         $this->type = $type;
-        } else throw new IngredientTypeException('Try to set a type that does not exist');
+        } else throw new Exception('Try to set a type that does not exist');
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipes(): Collection
+    {
+        return $this->beerRecipes;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipes->contains($beerRecepe)) {
+            $this->beerRecipes[] = $beerRecepe;
+            $beerRecepe->addFermentable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipes->removeElement($beerRecepe)) {
+            $beerRecepe->removeFermentable($this);
+        }
+
         return $this;
     }
 }

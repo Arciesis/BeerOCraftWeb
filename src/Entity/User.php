@@ -88,9 +88,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $boilerEquipment;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=BeerRecipe::class, mappedBy="owner")
+     */
+    private $beerRecipes;
+
     public function __construct()
     {
         $this->boilerEquipment = new ArrayCollection();
+        $this->beerRecipes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -236,6 +242,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($boilerEquipment->getOwner() === $this) {
                 $boilerEquipment->setOwner(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getBeerRecipes(): Collection
+    {
+        return $this->beerRecipes;
+    }
+
+    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if (!$this->beerRecipes->contains($beerRecepe)) {
+            $this->beerRecipes[] = $beerRecepe;
+            $beerRecepe->addOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    {
+        if ($this->beerRecipes->removeElement($beerRecepe)) {
+            $beerRecepe->removeOwner($this);
         }
 
         return $this;

@@ -2,22 +2,19 @@
 
 namespace Symfony\Config\Twig;
 
-
 use Symfony\Component\Config\Loader\ParamConfigurator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-
 /**
- * This class is automatically generated to help creating config.
- *
- * @experimental in 5.3
+ * This class is automatically generated to help in creating a config.
  */
 class NumberFormatConfig 
 {
     private $decimals;
     private $decimalPoint;
     private $thousandsSeparator;
-    
+    private $_usedProperties = [];
+
     /**
      * @default 0
      * @param ParamConfigurator|int $value
@@ -25,11 +22,12 @@ class NumberFormatConfig
      */
     public function decimals($value): self
     {
+        $this->_usedProperties['decimals'] = true;
         $this->decimals = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default '.'
      * @param ParamConfigurator|mixed $value
@@ -37,11 +35,12 @@ class NumberFormatConfig
      */
     public function decimalPoint($value): self
     {
+        $this->_usedProperties['decimalPoint'] = true;
         $this->decimalPoint = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default ','
      * @param ParamConfigurator|mixed $value
@@ -49,50 +48,51 @@ class NumberFormatConfig
      */
     public function thousandsSeparator($value): self
     {
+        $this->_usedProperties['thousandsSeparator'] = true;
         $this->thousandsSeparator = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
-    
-        if (isset($value['decimals'])) {
+        if (array_key_exists('decimals', $value)) {
+            $this->_usedProperties['decimals'] = true;
             $this->decimals = $value['decimals'];
             unset($value['decimals']);
         }
-    
-        if (isset($value['decimal_point'])) {
+
+        if (array_key_exists('decimal_point', $value)) {
+            $this->_usedProperties['decimalPoint'] = true;
             $this->decimalPoint = $value['decimal_point'];
             unset($value['decimal_point']);
         }
-    
-        if (isset($value['thousands_separator'])) {
+
+        if (array_key_exists('thousands_separator', $value)) {
+            $this->_usedProperties['thousandsSeparator'] = true;
             $this->thousandsSeparator = $value['thousands_separator'];
             unset($value['thousands_separator']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
-    
+
     public function toArray(): array
     {
         $output = [];
-        if (null !== $this->decimals) {
+        if (isset($this->_usedProperties['decimals'])) {
             $output['decimals'] = $this->decimals;
         }
-        if (null !== $this->decimalPoint) {
+        if (isset($this->_usedProperties['decimalPoint'])) {
             $output['decimal_point'] = $this->decimalPoint;
         }
-        if (null !== $this->thousandsSeparator) {
+        if (isset($this->_usedProperties['thousandsSeparator'])) {
             $output['thousands_separator'] = $this->thousandsSeparator;
         }
-    
+
         return $output;
     }
-    
 
 }
