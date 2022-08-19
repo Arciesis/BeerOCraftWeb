@@ -2,6 +2,7 @@
 
 namespace App\Exception;
 
+
 use Exception;
 
 class IngredientTypeException extends Exception
@@ -11,7 +12,7 @@ class IngredientTypeException extends Exception
     /** The error code */
     protected $code;
     /** The filename where the error happened  */
-    protected $file;
+    protected String $file;
     /** The line where the error happened */
-    protected $line;
+    protected int $line;
 }

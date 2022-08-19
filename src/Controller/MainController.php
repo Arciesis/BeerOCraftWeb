@@ -17,7 +17,9 @@ class MainController extends AbstractController
      */
     public function index(): Response
     {
-        $this->getUser()->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        if ($this->getUser() !== null) {
+            $this->getUser()->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        }
 
         return $this->render('main/index.html.twig');
     }
