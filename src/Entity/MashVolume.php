@@ -8,9 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=MashVolumeRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -28,32 +25,30 @@ use Symfony\Component\Validator\Constraints as Assert;
         'get'
     ],
 )]
+#[ORM\Entity(repositoryClass: MashVolumeRepository::class)]
+
 class MashVolume
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:collection:mashVolume","get:collection:mashVolume")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:collection:mashVolume')]
     private ?float $massGrainInMash;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:collection:mashVolume", "get:collection:mashVolume")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:collection:mashVolume')]
     private ?float $waterGrainRatio;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $mashVolume;
 
     public function getId(): ?int

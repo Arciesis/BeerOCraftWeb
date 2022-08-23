@@ -26,11 +26,28 @@ security:
                 check_path: /dashboard/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
+        refresh:
+            pattern: ^/dashboard/token/refresh
+            stateless: true
+#            anonymous: true
         api:
             pattern: ^/dashboard
             stateless: true
-#            anonymous: true
+#            guard:
+#                authenticators:
+#                    - lexik_jwt_authentication.jwt_token_authenticator
+            entry_point: jwt
+            jwt: ~
+            refresh_jwt:
+                check_path: /dashboard/token/refresh
+
+#            json_login:
+#                check_path: /dashboard/login_check
+#                success_handler: lexik_jwt_authentication.handler.authentication_success
+#                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+
+                #            anonymous: true
 #                thentication.jwt_authenticator
 #            jwt: ~
 
@@ -62,8 +79,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/dashboard/token/refresh, roles: PUBLIC_ACCESS}
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/dashboard/(login|token/refresh), roles: PUBLIC_ACCESS }
         - { path: ^/dashboard/docs,  roles: PUBLIC_ACCESS }
         - { path: ^/dashboard,       roles: IS_AUTHENTICATED_FULLY }
 

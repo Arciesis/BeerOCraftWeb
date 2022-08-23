@@ -10,9 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=InitInfusionRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'post' => [
@@ -25,56 +22,50 @@ use Symfony\Component\Validator\Constraints as Assert;
         'get'
     ]
 )]
+#[ORM\Entity(repositoryClass: InitInfusionRepository::class)]
+
 class InitInfusion
 {
-   /**
-   * @ORM\Id
-   * @ORM\GeneratedValue
-   * @ORM\Column(type="integer")
-   */
+   #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:initInfusion")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:initInfusion')]
     private ?float $initGrainTemp;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:initInfusion")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:initInfusion')]
     private ?float $wantedMashTemp;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:initInfusion")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:initInfusion')]
     private ?float $waterGrainRatio;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $waterTempToAdjunct;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:initInfusion")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:initInfusion')]
     private ?float $time;
 
-    /**
-     * @ORM\OneToMany(targetEntity=InfusionMashSteps::class, mappedBy="initInfusion", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: InfusionMashSteps::class, mappedBy: 'initInfusion', orphanRemoval: true)]
     private Collection $relatedInfusionMashStep;
 
-    /**
-     * @ORM\OneToMany(targetEntity=DecoctionMashSteps::class, mappedBy="initInfusion")
-     */
+    #[ORM\OneToMany(targetEntity: DecoctionMashSteps::class, mappedBy: 'initInfusion')]
     private Collection $relatedDecoctionMashSteps;
 
     public function __construct()

@@ -14,9 +14,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\MashRepository", repositoryClass=MashRepository::class)
- */
 #[
     ApiResource(
         collectionOperations: [
@@ -32,53 +29,39 @@ use Symfony\Component\Validator\Constraints as Assert;
     )
 
 ]
+#[ORM\Entity(repositoryClass: MashRepository::class)]
+
 class Mash
 {
     const TYPE_AVAILABLE = ['infusion', 'decoction'];
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @ApiProperty(identifier=false)
      * @Ignore()
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    #[ApiProperty(identifier: false)]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * Assert\NotBlank()
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\Column(type="string", length=511)
-     * @ApiProperty(identifier=true)
-     * @Gedmo\Slug(fields={"slug"})
-     *
-     */
+    #[ORM\Column(type: 'string', length: 511)]
+    #[ApiProperty(identifier: true)]
+    #[Gedmo\Slug(fields: ['slug'])]
     private $slug;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * Assert\NotBlank()
-     * Assert\Choice("infusion", "decoction")
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=InfusionMashSteps::class)
-     */
+    #[ORM\ManyToOne(targetEntity: InfusionMashSteps::class)]
     private ?InfusionMashSteps $infusionMashSteps;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=DecoctionMashSteps::class)
-     */
+    #[ORM\ManyToOne(targetEntity: DecoctionMashSteps::class)]
     private ?DecoctionMashSteps $decoctionMashSteps;
 
-    /**
-     * @ORM\OneToMany(targetEntity=BeerRecipe::class, mappedBy="mash")
-     */
+    #[ORM\OneToMany(targetEntity: BeerRecipe::class, mappedBy: 'mash')]
     private $beerRecipes;
 
     public function __construct()

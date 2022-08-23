@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\BeerRecipeRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-
 
 #[ApiResource(
     collectionOperations: [
@@ -28,98 +28,70 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'put',
     ]
 )]
-#[
-    ORM\Entity(repositoryClass: BeerRecipeRepository::class)
-]
+#[ORM\Entity(repositoryClass: BeerRecipeRepository::class)]
+
 class BeerRecipe
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    #[ApiProperty(identifier: true)]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private string $name;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=false)
-     * @Groups("post:collection:beerRecipe")
-     */
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    #[Groups('post:collection:beerRecipe')]
     private bool $isPublic;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="beerRecipes")
-     * @Groups("get:collection:beerRecipe")
-     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'beerRecipes')]
+    #[Groups('get:collection:beerRecipe')]
     private ?ArrayCollection $owner;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=BoilerEquipment::class, inversedBy="beerRecipes")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\ManyToOne(targetEntity: BoilerEquipment::class, inversedBy: 'beerRecipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private BoilerEquipment $equipment;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=BeerStyle::class, inversedBy="beerRecipes")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\ManyToOne(targetEntity: BeerStyle::class, inversedBy: 'beerRecipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private BeerStyle $style;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Fermentable::class, inversedBy="beerRecipes")
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\ManyToMany(targetEntity: Fermentable::class, inversedBy: 'beerRecipes')]
+    #[Groups('get:collection:beerRecipe')]
     private ?ArrayCollection $fermentables;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Hop::class, inversedBy="beerRecipes")
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\ManyToMany(targetEntity: Hop::class, inversedBy: 'beerRecipes')]
+    #[Groups('get:collection:beerRecipe')]
     private ?ArrayCollection $hops;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Yeast::class, inversedBy="beerRecipes")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\ManyToOne(targetEntity: Yeast::class, inversedBy: 'beerRecipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private Yeast $yeast;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Mash::class, inversedBy="beerRecipes")
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\ManyToOne(targetEntity: Mash::class, inversedBy: 'beerRecipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private Mash $mash;
 
-    /**
-     * @ORM\Column(type="float",nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\Column(type: 'float', nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private float $targetBatchSize;
 
-    /**
-     * @ORM\Column(type="float", nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\Column(type: 'float', nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private float $targetBoilSize;
 
-    /**
-     * @ORM\Column(type="float", nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\Column(type: 'float', nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private float $boilTime;
 
-    /**
-     * @ORM\Column(type="float", nullable=false)
-     * @Groups("get:collection:beerRecipe", "post:collection:beerRecipe")
-     */
+    #[ORM\Column(type: 'float', nullable: false)]
+    #[Groups('get:collection:beerRecipe')]
     private float $specificGravity;
 
     public function __construct()

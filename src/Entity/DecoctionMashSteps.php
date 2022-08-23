@@ -8,9 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DecoctionMashStepsRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'post'
@@ -19,46 +16,34 @@ use Doctrine\ORM\Mapping as ORM;
 
     ]
 )]
+#[ORM\Entity(repositoryClass: DecoctionMashStepsRepository::class)]
+
 class DecoctionMashSteps
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name;
 
-    /**
-     * @ORM\OneToOne(targetEntity=MashVolume::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\OneToOne(targetEntity: MashVolume::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?MashVolume $mashVolumeEstimation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=InitInfusion::class, inversedBy="relatedDecoctionMashSteps")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: InitInfusion::class, inversedBy: 'relatedDecoctionMashSteps')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?InitInfusion $initInfusion;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=NextDecoctionMashStepWithGrainAdjunct::class, inversedBy="relatedDecoctionMashSteps")
-     */
+    #[ORM\ManyToMany(targetEntity: NextDecoctionMashStepWithGrainAdjunct::class, inversedBy: 'relatedDecoctionMashSteps')]
     private ?ArrayCollection $mashStepWithAdjunct;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=NextDecoctionMashStepWithoutGrainAdjunct::class, inversedBy="relatedDecoctionMashSteps")
-     * @ORM\JoinTable(name="decoction_mash_steps_next_decoction_mash_step_wo_grain_adjunct")
-     */
+    #[ORM\ManyToMany(targetEntity: NextDecoctionMashStepWithoutGrainAdjunct::class, inversedBy: 'relatedDecoctionMashSteps')]
+    #[ORM\JoinTable(name: 'decoction_mash_steps_next_decoction_mash_step_wo_grain_adjunct')]
     private ?ArrayCollection $mashStepWithoutGrainAdjunct;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $totalTime;
 
     public function __construct()

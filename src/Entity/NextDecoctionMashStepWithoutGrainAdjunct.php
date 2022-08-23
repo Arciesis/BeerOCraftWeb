@@ -9,9 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=NextDecoctionMashStepWithoutGrainAdjunctRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'post' => [
@@ -24,63 +21,47 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get'
     ]
 )]
+#[ORM\Entity(repositoryClass: NextDecoctionMashStepWithoutGrainAdjunctRepository::class)]
+
 class NextDecoctionMashStepWithoutGrainAdjunct
 {
     public const WATER_HEAT_CAPACITY = 4200;
     public const GRAIN_HEAT_CAPACITY = 1714;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
-     */
+    #[ORM\OneToOne(targetEntity: WaterGrainRatio::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('post:nextDecoctionMashStepWithoutGrainAdjunct')]
     private ?WaterGrainRatio $waterGrainRatio;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithoutGrainAdjunct')]
     private ?float $wantedTempNextStep;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithoutGrainAdjunct')]
     private ?float $decoctionWaterGrainRatio;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithoutGrainAdjunct')]
     private ?float $waterTempToadd;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithoutGrainAdjunct')]
     private ?float $decoctionBoilTime;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithoutGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithoutGrainAdjunct')]
     private ?float $evaporationRate;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $decoctionVolumeToTake;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=DecoctionMashSteps::class, mappedBy="mashStepWithoutGrainAdjunct")
-     */
+    #[ORM\ManyToMany(targetEntity: DecoctionMashSteps::class, mappedBy: 'mashStepWithoutGrainAdjunct')]
     private Collection $relatedDecoctionMashSteps;
 
     public function __construct()

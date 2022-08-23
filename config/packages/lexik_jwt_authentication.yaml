@@ -2,8 +2,8 @@ lexik_jwt_authentication:
     secret_key: '%env(resolve:JWT_SECRET_KEY)%' # required for token creation
     public_key: '%env(resolve:JWT_PUBLIC_KEY)%' # required for token verification
     pass_phrase: '%env(JWT_PASSPHRASE)%' # required for token creation
-    token_ttl: 3600 # in seconds, default is 3600
-
+    token_ttl: 600 # in seconds, default is 3600, here it's 10min
+#    user_identity_field: 'realUsername' # default is 'username'
 
 # curl -X POST -H "Content-Type: application/json" http://beerocraft.localhost/dashboard/login_check -d '{"username":"favier.mathis@gmail.com","password":"$argon2i$v=19$m=65536,t=4,p=1$7EedaEP0B0TSffKzdONd8w$I3R0amRKSOTYGuyw0BPTOwwUDElxoG/dIEo3bDHArWQ"}'
 

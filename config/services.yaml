@@ -29,3 +29,7 @@ services:
             - {name: doctrine.event_subscriber, connection: default}
         calls:
             - [setAnnotationReader,["@annotation_reader"]]
+
+    App\OpenApi\JwtDecorator:
+        decorates: 'api_platform.openapi.factory'
+        arguments: ['@.inner']

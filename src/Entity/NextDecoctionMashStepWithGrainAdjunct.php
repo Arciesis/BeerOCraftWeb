@@ -9,9 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Entity(repositoryClass=NextDecoctionMashStepWithGrainAdjunctRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'post' => [
@@ -24,6 +21,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get'
     ]
 )]
+#[ORM\Entity(repositoryClass: NextDecoctionMashStepWithGrainAdjunctRepository::class)]
+
 class NextDecoctionMashStepWithGrainAdjunct
 {
 
@@ -32,88 +31,59 @@ class NextDecoctionMashStepWithGrainAdjunct
     public const CELSIUS_TO_KELVIN_ADJUNCT = 273.15;
 
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=WaterGrainRatio::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     *
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\ManyToOne(targetEntity: WaterGrainRatio::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?WaterGrainRatio $waterGrainRatio;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $wantedTempNextStep;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $decoctionWaterGrainRatio;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $waterTempToAdd;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $decoctionBoilTime;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $evaporationRate;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $grainMassToAdd;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $grainTempToAdd;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $waterVolumeToAdd;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Groups("post:nextDecoctionMashStepWithGrainAdjunct")
-     */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:nextDecoctionMashStepWithGrainAdjunct')]
     private ?float $tempOfBrewWaterAdjunct;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $decoctionVolumeToTake;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $newWaterGrainRatio;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=DecoctionMashSteps::class, mappedBy="mashStepWithAdjunct")
-     */
+    #[ORM\ManyToMany(targetEntity: DecoctionMashSteps::class, mappedBy: 'mashStepWithAdjunct')]
     private Collection $relatedDecoctionMashSteps;
 
     public function __construct()

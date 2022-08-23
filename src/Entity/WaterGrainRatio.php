@@ -7,9 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=WaterGrainRatioRepository::class)
- */
 #[ApiResource(
     collectionOperations: [
         'post' => [
@@ -22,39 +19,37 @@ use Symfony\Component\Validator\Constraints as Assert;
         'get'
     ]
 )]
+#[ORM\Entity(repositoryClass: WaterGrainRatioRepository::class)]
+
 class WaterGrainRatio
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:waterGrainRatio")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:waterGrainRatio')]
     private ?float $initMashTemp;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:waterGrainRatio")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:waterGrainRatio')]
     private ?float $initMashDryGrain;
 
     /**
-     * @ORM\Column(type="float")
      * @Assert\NotBlank()
-     * @Groups("post:waterGrainRatio")
      */
+    #[ORM\Column(type: 'float')]
+    #[Groups('post:waterGrainRatio')]
     private ?float $initWaterVolume;
 
-    /**
-     * @ORM\Column(type="float")
-     */
+    #[ORM\Column(type: 'float')]
     private ?float $initWaterGrainRatio;
 
     public function getId(): ?int

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\MeController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,81 +18,82 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- *
- * @ApiResource(
- *     collectionOperations={
- *     "post"
- *     },
- *      itemOperations={
- *          "get",
- *          "patch"={"security"="is_granted('USER_EDIT', object)"}
- *     },
- *     normalizationContext={"groups"="user:read"},
- *     denormalizationContext={"groups"="user:write"}
- * )
  * @UniqueEntity(fields={"realUsername"}, message="There is already an account with this username")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
+#[ApiResource(collectionOperations: [
+    'me' => [
+        'pagination_enabled' => false,
+        'method' => 'GET',
+        'path' => '/me',
+        'controller' => MeController::class,
+        'read' => false,
+        'security' => 'is_granted("ROLE_USER", object)',
+        ],
+    ],
+    itemOperations: [
+        'get' => ['method' => 'GET'],
+        'patch' => [
+            'security' => "is_granted('USER_EDIT', object)",
+        ],
+    ],
+    normalizationContext: [
+        'groups' => ['user:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['user:write'],
+    ],
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @Groups("user:read")
-     *
-     * @ApiProperty(identifier=false)
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    #[Groups('user:read')]
+    #[ApiProperty(identifier: false)]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups("user:read")
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Groups('user:read')]
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     * @Groups("user:read")
-     */
+    #[ORM\Column(type: 'json')]
+    #[Groups('user:read')]
     private $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      *
-     * @Groups("user:read","user:write")
      */
+    #[ORM\Column(type: 'string')]
+    #[Groups('user:read')]
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     *
      * @Assert\Length(min="3", max="25")
-     * @Groups("user:read")
-     * @ApiProperty(identifier=true)
-     * @Gedmo\Slug(fields={"realUsername"})
      */
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Groups('user:read')]
+    #[ApiProperty(identifier: true)]
+    #[Gedmo\Slug(fields: ['realUsername'])]
     private string $realUsername;
 
     /**
-     * @ORM\Column(type="boolean")
      * @Ignore()
      */
+    #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity=BoilerEquipment::class, mappedBy="owner")
-     * @Groups("user:read")
-     */
+    #[ORM\OneToMany(targetEntity: BoilerEquipment::class, mappedBy: 'owner')]
+    #[Groups('user:read')]
     private $boilerEquipment;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=BeerRecipe::class, mappedBy="owner")
-     */
+    #[ORM\ManyToMany(targetEntity: BeerRecipe::class, mappedBy: 'owner')]
+    #[Groups('user:read')]
     private $beerRecipes;
+
 
     public function __construct()
     {
@@ -123,7 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -131,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -195,8 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->realUsername;
     }
-
-
 
     public function setRealUsername(string $realUsername): self
     {
