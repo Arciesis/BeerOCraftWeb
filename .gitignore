@@ -2,6 +2,7 @@
 .env
 BeerOCraft.iml
 public/.htaccess
+rector.php
 
 config/jwt/private.pem
 config/jwt/public.pem
