@@ -2,23 +2,20 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\NextInfusionMashStepWithGrainAdjunctRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: [
-        'post' => [
-            'denormalization_context' => [
-                'groups' => ['post:nextInfusionStepWithtGrainAdjunct']
-            ]
-        ]
+        'post',
     ],
     itemOperations: [
-        'get'
+        'get',
     ]
 )]
 #[ORM\Entity(repositoryClass: NextInfusionMashStepWithGrainAdjunctRepository::class)]
@@ -33,26 +30,27 @@ class NextInfusionMashStepWithGrainAdjunct
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[ApiProperty(identifier: true)]
     private ?int $id;
 
     #[ORM\ManyToOne(targetEntity: WaterGrainRatio::class, cascade: ['persist', 'remove'])]
-    #[Groups('post:nextInfusionStepWithtGrainAdjunct')]
+    #[Assert\NotNull]
     private ?WaterGrainRatio $waterGrainRatioId;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithtGrainAdjunct')]
+    #[Assert\NotNull]
     private ?float $grainMassToAdd;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithtGrainAdjunct')]
+    #[Assert\NotNull]
     private ?float $tempOfGrainToAdd;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithtGrainAdjunct')]
+    #[Assert\NotNull]
     private ?float $wantedTempAtNextStep;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithtGrainAdjunct')]
+    #[Assert\NotNull]
     private ?float $waterTempToAdd;
 
     #[ORM\Column(type: 'float')]
@@ -62,7 +60,7 @@ class NextInfusionMashStepWithGrainAdjunct
     private ?float $newWaterGrainRatio;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithtGrainAdjunct')]
+    #[Assert\NotNull]
     private ?float $time;
 
     #[ORM\ManyToMany(targetEntity: InfusionMashSteps::class, mappedBy: 'mashStepWithAdjunct')]

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BoilerEquipmentRepository::class)]
 #[ApiResource()]
@@ -19,26 +20,45 @@ class BoilerEquipment
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[ApiProperty(identifier: false)]
-    private $id;
+    private ?int $id;
+
     #[ORM\Column(type: 'string', length: 255)]
-    #[ApiProperty(identifier: true)]
-    #[Gedmo\Slug(fields: ['name'])]
-    private $name;
+    #[Assert\NotNull]
+    private String $name;
+
     #[ORM\Column(type: 'integer')]
-    private $preBoilVolume;
+    #[Assert\NotNull]
+    private int $preBoilVolume;
+
     #[ORM\Column(type: 'integer')]
-    private $batchSize;
+    #[Assert\NotNull]
+    private int $batchSize;
+
     #[ORM\Column(type: 'smallint')]
-    private $boilTime;
+    #[Assert\NotNull]
+    private int $boilTime;
+
     #[ORM\Column(type: 'smallint')]
-    private $evaporationRatePercentage;
+    #[Assert\NotNull]
+    private int $evaporationRatePercentage;
+
     #[ORM\Column(type: 'float')]
-    private $grainAbsorption;
+    #[Assert\NotNull]
+    private float $grainAbsorption;
+
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'boilerEquipment')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull]
     private User $owner;
+
     #[ORM\OneToMany(targetEntity: BeerRecipe::class, mappedBy: 'equipment')]
-    private $beerRecipes;
+    private ?Collection $beerRecipes;
+
+    #[ORM\Column(length: 255)]
+    #[ApiProperty(identifier: true)]
+    #[Gedmo\Slug(fields: ['name'])]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->beerRecipes = new ArrayCollection();
@@ -157,6 +177,18 @@ class BoilerEquipment
                 $beerRecepe->setEquipment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

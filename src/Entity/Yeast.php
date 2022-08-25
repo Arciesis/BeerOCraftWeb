@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use phpDocumentor\Reflection\Types\Self_;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource]
 #[ORM\Entity(repositoryClass: YeastRepository::class)]
@@ -26,24 +26,32 @@ class Yeast
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotNull]
     private $type;
 
     #[ORM\Column(type: 'smallint')]
+    #[Assert\NotNull]
     private $viability;
 
     #[ORM\Column(type: 'smallint')]
+    #[Assert\NotNull]
     private $tempMin;
 
     #[ORM\Column(type: 'smallint')]
+    #[Assert\NotNull]
     private $tempMax;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Gedmo\Slug(fields: ['name'])]
-    #[ApiProperty(identifier: true)]
+    #[Assert\NotNull]
     private $name;
 
     #[ORM\OneToMany(targetEntity: BeerRecipe::class, mappedBy: 'yeast')]
     private $beerRecipes;
+
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(fields: ['name'])]
+    #[ApiProperty(identifier: true)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -128,6 +136,18 @@ class Yeast
                 $beerRecepe->setYeast(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

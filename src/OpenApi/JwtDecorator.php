@@ -79,6 +79,9 @@ class JwtDecorator implements OpenApiFactoryInterface
                 ],
             ),
             summary: 'Get JWT Token to login.',
+
+// TODO know why th doc doesn't work
+
 //             The docs says to do so but actually it doesn't work...
 //            requestBody: new RequestBody(
 //                description: 'Generate new JWT Token',

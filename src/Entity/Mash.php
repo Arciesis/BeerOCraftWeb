@@ -27,7 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         normalizationContext: ['groups' => 'read'],
         denormalizationContext: ['groups' => 'write']
     )
-
 ]
 #[ORM\Entity(repositoryClass: MashRepository::class)]
 
@@ -42,26 +41,37 @@ class Mash
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[ApiProperty(identifier: false)]
+    #[Groups('read')]
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 3, max: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $name;
 
     #[ORM\Column(type: 'string', length: 511)]
     #[ApiProperty(identifier: true)]
-    #[Gedmo\Slug(fields: ['slug'])]
+    #[Gedmo\Slug(fields: ['name'])]
+    #[Groups('read')]
     private $slug;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 3, max: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $type;
 
     #[ORM\ManyToOne(targetEntity: InfusionMashSteps::class)]
+    #[Groups(['read', 'write'])]
     private ?InfusionMashSteps $infusionMashSteps;
 
     #[ORM\ManyToOne(targetEntity: DecoctionMashSteps::class)]
+    #[Groups(['read', 'write'])]
     private ?DecoctionMashSteps $decoctionMashSteps;
 
     #[ORM\OneToMany(targetEntity: BeerRecipe::class, mappedBy: 'mash')]
+    #[Groups(['read', 'write'])]
     private $beerRecipes;
 
     public function __construct()

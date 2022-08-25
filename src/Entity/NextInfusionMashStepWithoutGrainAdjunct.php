@@ -2,20 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\NextInfusionMashStepWithoutGrainAdjunctRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: [
-        'post' => [
-            'denormalization_context' => [
-                'groups' => ['post:nextInfusionStepWithoutGrainAdjunct']
-            ]
-        ]
+        'post',
     ],
     itemOperations: [
         'get'
@@ -28,26 +26,27 @@ class NextInfusionMashStepWithoutGrainAdjunct
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[ApiProperty(identifier: true)]
     private ?int $id;
 
     /**
      *
-     * // ManyToMany relation not sure it's correct tho
+     * // ManyToMany relation not sure it's correct though
      * // ORM\JoinTable(name="next_infusion_mash_step_without_grain_adjunct_water_grain_ratio",
      * //     joinColumns={@ORM\JoinColumn(name="next_infusion_mash_step_without_grain_adjunct_water_grain_ratio_id", referencedColumnName="id", nullable=false)},
      * //     inverseJoinColumns={@ORM\JoinColumn(name="water_grain_ratio_id", referencedColumnName="id", nullable=false)}
      * )
      */
     #[ORM\ManyToOne(targetEntity: WaterGrainRatio::class, cascade: ['persist', 'remove'])]
-    #[Groups('post:nextInfusionStepWithoutGrainAdjunct')]
+    #[Assert\NotNull]
     private ?WaterGrainRatio $waterGrainRatioId;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithoutGrainAdjunct')]
+    #[Assert\NotNull]
     private float $waterAdjunctTemp;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithoutGrainAdjunct')]
+    #[Assert\NotNull]
     private float $wantedTempAtNextStep;
 
     #[ORM\Column(type: 'float')]
@@ -57,7 +56,7 @@ class NextInfusionMashStepWithoutGrainAdjunct
     private float $newWaterGrainRatio;
 
     #[ORM\Column(type: 'float')]
-    #[Groups('post:nextInfusionStepWithoutGrainAdjunct')]
+    #[Assert\NotNull]
     private float $time;
 
     #[ORM\ManyToMany(targetEntity: InfusionMashSteps::class, mappedBy: 'mashStepsWithoutAdjunct')]

@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FermentableRepository::class)]
 #[ApiResource]
@@ -18,51 +19,81 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Fermentable
 {
     private const TYPE = ['grain', 'extract'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[ApiProperty(identifier: false)]
     private $id;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $humidity;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $grindExtract;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $totalProt;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $solubleProt;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $kolbachIndex;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $fan;
+
     #[ORM\Column(type: 'smallint')]
+    #[Assert\NotNull]
     private $ebc;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $kz;
+
     #[ORM\Column(type: 'smallint')]
+    #[Assert\NotNull]
     private $saccharification;
+
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull]
     private $distaticPower;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $ph;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $fiability;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $homogeneity;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $viscosity;
+
     #[ORM\Column(type: 'smallint', nullable: true)]
     private $Bglucane;
+
     #[ORM\Column(type: 'smallint')]
+    #[Assert\NotNull]
     private $limitAttenuation;
+
     #[ORM\Column(type: 'string', length: 255)]
-    #[ApiProperty(identifier: true)]
-    #[Gedmo\Slug(fields: ['name'])]
+    #[Assert\NotNull]
     private $name;
+
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotNull]
     private $type;
+
     #[ORM\ManyToMany(targetEntity: BeerRecipe::class, mappedBy: 'fermentables')]
     private $beerRecipes;
+
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(fields: ['name'])]
+    #[ApiProperty(identifier: true)]
+    private ?string $slug = null;
+
     public function __construct()
     {
         $this->beerRecipes = new ArrayCollection();
@@ -273,6 +304,18 @@ class Fermentable
         if ($this->beerRecipes->removeElement($beerRecepe)) {
             $beerRecepe->removeFermentable($this);
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

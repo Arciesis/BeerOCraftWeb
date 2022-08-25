@@ -34,18 +34,15 @@ class MashVolume
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @Assert\NotBlank()
-     */
+
     #[ORM\Column(type: 'float')]
     #[Groups('post:collection:mashVolume')]
+    #[Assert\NotNull]
     private ?float $massGrainInMash;
 
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'float')]
     #[Groups('post:collection:mashVolume')]
+    #[Assert\NotNull]
     private ?float $waterGrainRatio;
 
     #[ORM\Column(type: 'float')]

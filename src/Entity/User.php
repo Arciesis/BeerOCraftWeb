@@ -24,14 +24,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(collectionOperations: [
-    'me' => [
-        'pagination_enabled' => false,
-        'method' => 'GET',
-        'path' => '/me',
-        'controller' => MeController::class,
-        'read' => false,
-        'security' => 'is_granted("ROLE_USER", object)',
-        ],
     ],
     itemOperations: [
         'get' => ['method' => 'GET'],
@@ -56,7 +48,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Groups('user:read')]
+    #[Groups(['user:read', 'user:write'])]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 3, max: 180)]
+    #[Assert\Email]
     private $email;
 
     #[ORM\Column(type: 'json')]
@@ -68,16 +63,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      */
     #[ORM\Column(type: 'string')]
-    #[Groups('user:read')]
+    #[Groups(['user:read', 'user:write'])]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 12, max: 255)]
+    #[Assert\Regex(pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/", message: "Password must contain at least one lowercase letter, one uppercase letter, one number and one special character")]
     private $password;
 
     /**
      * @Assert\Length(min="3", max="25")
      */
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
-    #[Groups('user:read')]
+    #[ORM\Column(type: 'string', length: 25, unique: true)]
+    #[Groups(['user:read', 'user:write'])]
     #[ApiProperty(identifier: true)]
     #[Gedmo\Slug(fields: ['realUsername'])]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 3, max: 25)]
     private string $realUsername;
 
     /**
@@ -88,17 +88,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: BoilerEquipment::class, mappedBy: 'owner')]
     #[Groups('user:read')]
-    private $boilerEquipment;
+    private ?Collection $boilerEquipment;
 
-    #[ORM\ManyToMany(targetEntity: BeerRecipe::class, mappedBy: 'owner')]
+    #[ORM\OneToMany(targetEntity: BeerRecipe::class, mappedBy: 'realOwner')]
     #[Groups('user:read')]
-    private $beerRecipes;
+    private ?Collection $myBeersRecipes;
+
+    #[ORM\ManyToMany(targetEntity: BeerRecipe::class, mappedBy: 'logicalOwner')]
+    #[Groups('user:read')]
+    private ?Collection $beerRecipes;
 
 
     public function __construct()
     {
         $this->boilerEquipment = new ArrayCollection();
         $this->beerRecipes = new ArrayCollection();
+        $this->myBeersRecipes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,7 +248,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $boilerEquipment->setOwner(null);
             }
         }
-
         return $this;
     }
 
@@ -255,22 +259,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->beerRecipes;
     }
 
-    public function addBeerRecepe(BeerRecipe $beerRecepe): self
+    public function addBeerRecipes(BeerRecipe $beerRecepe): self
     {
         if (!$this->beerRecipes->contains($beerRecepe)) {
             $this->beerRecipes[] = $beerRecepe;
-            $beerRecepe->addOwner($this);
+            $beerRecepe->addLogicalOwner($this);
         }
 
         return $this;
     }
 
-    public function removeBeerRecepe(BeerRecipe $beerRecepe): self
+    public function removeBeerRecipes(BeerRecipe $beerRecepe): self
     {
         if ($this->beerRecipes->removeElement($beerRecepe)) {
-            $beerRecepe->removeOwner($this);
+            $beerRecepe->removeLogicalOwner($this);
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|BeerRecipe[]
+     */
+    public function getMyBeersRecipes(): Collection
+    {
+        return $this->myBeersRecipes;
+    }
+
+    public function addMyBeerRecipes(BeerRecipe $myBeersRecipes): self
+    {
+        if (!$this->myBeerRecipes->contains($myBeersRecipes)) {
+            $this->myBeerRecipes[] = $myBeersRecipes;
+            $myBeersRecipes->setRealOwner($this);
+        }
+        return $this;
+    }
+
+    public function removeMyBeersRecipes(BeerRecipe $myBeersRecipes): self
+    {
+        if ($this->myBeersRecipes->removeElement($myBeersRecipes)) {
+            // set the owning side to null (unless already changed)
+            if ($myBeersRecipes->getRealOwner() === $this) {
+                $myBeersRecipes->setRealOwner(null);
+            }
+        }
         return $this;
     }
 }

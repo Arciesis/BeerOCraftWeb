@@ -19,6 +19,17 @@ class BeerRecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, BeerRecipe::class);
     }
 
+    public function findPublicAndOwnedByUser($user)
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.isPublic = true OR b.realOwner = :user')
+            ->setParameter('user', $user)
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return BeerRecipe[] Returns an array of BeerRecipe objects
     //  */

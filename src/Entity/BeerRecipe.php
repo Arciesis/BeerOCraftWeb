@@ -8,20 +8,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\BeerRecipeRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation\Slug;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     collectionOperations: [
-        'get' => [
-            'normalization_context' => [
-                'groups' => ['get:collection:beerRecipe'],
-            ],
-        ],
-        'post' => [
-            'denormalization_context' => [
-                'groups' => ['post:collection:beerRecipe'],
-            ],
-        ],
+        'get',
+        'post',
     ],
     itemOperations: [
         'get',
@@ -35,68 +28,71 @@ class BeerRecipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[ApiProperty(identifier: true)]
+    #[ApiProperty(identifier: false)]
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 3, max: 255)]
     private string $name;
 
     #[ORM\Column(type: 'boolean', nullable: false)]
-    #[Groups('post:collection:beerRecipe')]
+    #[Assert\NotNull]
     private bool $isPublic;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'beerRecipes')]
-    #[Groups('get:collection:beerRecipe')]
-    private ?ArrayCollection $owner;
+    private ?Collection $logicalOwner;
 
     #[ORM\ManyToOne(targetEntity: BoilerEquipment::class, inversedBy: 'beerRecipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
     private BoilerEquipment $equipment;
 
     #[ORM\ManyToOne(targetEntity: BeerStyle::class, inversedBy: 'beerRecipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
     private BeerStyle $style;
 
     #[ORM\ManyToMany(targetEntity: Fermentable::class, inversedBy: 'beerRecipes')]
-    #[Groups('get:collection:beerRecipe')]
-    private ?ArrayCollection $fermentables;
+    private ?Collection $fermentables;
 
     #[ORM\ManyToMany(targetEntity: Hop::class, inversedBy: 'beerRecipes')]
-    #[Groups('get:collection:beerRecipe')]
-    private ?ArrayCollection $hops;
+    private ?Collection $hops;
 
     #[ORM\ManyToOne(targetEntity: Yeast::class, inversedBy: 'beerRecipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
     private Yeast $yeast;
 
     #[ORM\ManyToOne(targetEntity: Mash::class, inversedBy: 'beerRecipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
     private Mash $mash;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
+    #[Assert\NotNull]
     private float $targetBatchSize;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
+    #[Assert\NotNull]
     private float $targetBoilSize;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
+    #[Assert\NotNull]
     private float $boilTime;
 
     #[ORM\Column(type: 'float', nullable: false)]
-    #[Groups('get:collection:beerRecipe')]
+    #[Assert\NotNull]
     private float $specificGravity;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'myBeersRecipes' ,cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, unique: false)]
+    private ?User $realOwner;
+
+    #[ORM\Column(length: 255)]
+    #[ApiProperty(identifier: true)]
+    #[Slug(fields: ['name'])]
+    private ?string $slug = null;
 
     public function __construct()
     {
-        $this->owner = new ArrayCollection();
+        $this->logicalOwner = new ArrayCollection();
         $this->fermentables = new ArrayCollection();
         $this->hops = new ArrayCollection();
     }
@@ -111,11 +107,12 @@ class BeerRecipe
         return $this->name;
     }
 
-    public function setName(string $name): self
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getIsPublic(): ?bool
@@ -133,23 +130,23 @@ class BeerRecipe
     /**
      * @return Collection|User[]
      */
-    public function getOwner(): Collection
+    public function getLogicalOwner(): Collection
     {
-        return $this->owner;
+        return $this->logicalOwner;
     }
 
-    public function addOwner(User $owner): self
+    public function addLogicalOwner(User $owner): self
     {
-        if (!$this->owner->contains($owner)) {
-            $this->owner[] = $owner;
+        if (!$this->logicalOwner->contains($owner)) {
+            $this->logicalOwner[] = $owner;
         }
 
         return $this;
     }
 
-    public function removeOwner(User $owner): self
+    public function removeLogicalOwner(User $owner): self
     {
-        $this->owner->removeElement($owner);
+        $this->logicalOwner->removeElement($owner);
 
         return $this;
     }
@@ -294,6 +291,30 @@ class BeerRecipe
     public function setSpecificGravity(float $specificGravity): self
     {
         $this->specificGravity = $specificGravity;
+
+        return $this;
+    }
+
+    public function getRealOwner(): ?User
+    {
+        return $this->realOwner;
+    }
+
+    public function setRealOwner(?User $realOwner): self
+    {
+        $this->realOwner = $realOwner;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
