@@ -28,25 +28,19 @@ class WaterGrainRatio
     #[ORM\Column(type: 'integer')]
     private ?int $id;
 
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'float')]
     #[Groups('post:waterGrainRatio')]
+    #[Assert\NotNull]
     private ?float $initMashTemp;
 
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'float')]
     #[Groups('post:waterGrainRatio')]
+    #[Assert\NotNull]
     private ?float $initMashDryGrain;
 
-    /**
-     * @Assert\NotBlank()
-     */
     #[ORM\Column(type: 'float')]
     #[Groups('post:waterGrainRatio')]
+    #[Assert\NotNull]
     private ?float $initWaterVolume;
 
     #[ORM\Column(type: 'float')]
