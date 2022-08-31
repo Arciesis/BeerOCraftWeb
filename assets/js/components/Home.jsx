@@ -3,6 +3,7 @@ import LeftPanelMenu from './LeftPanelMenu';
 import axios from 'axios';
 import BeerStylesMenu from './BeerStylesMenu';
 import {Redirect} from 'react-router-dom';
+import Register from './Register';
 
 
 const Home = () => {
@@ -11,8 +12,15 @@ const Home = () => {
 
   return (
     <div>
+      <div>
       <LeftPanelMenu />
-      <BeerStylesMenu />
+      </div>
+      <div>
+        <BeerStylesMenu />
+      </div>
+      <div>
+        <Register />
+      </div>
     </div>
   );
 };

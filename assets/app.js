@@ -11,8 +11,21 @@
 // import './bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import './styles/app.css';
 import Home from './js/components/Home.jsx';
 
-ReactDOM.render(<Router><Home /></Router>, document.getElementById('root'))
+// const App = () => {
+//   return (
+//     <Router>
+//       <Routes>
+//         <Route path="/" element={<Home/>}/>
+//       </Routes>
+//     </Router>
+//   );
+// };
+
+export default App;
+ReactDOM.render(<Router><Home/></Router>, document.getElementById('root'));
+
+

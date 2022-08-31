@@ -1,10 +1,16 @@
 {% extends 'base.html.twig' %}
+<head>
+   {% block title %}BeerOCraft{% endblock %}
+   {% block stylesheets %}
+      {{ encore_entry_link_tags('app') }}
+   {% endblock %}
+   {% block javascripts %}
+      {{ encore_entry_script_tags('app') }}
+   {% endblock %}
 
-{% block title %}BeerOCraft{% endblock %}
+</head>
 
 {% block body %}
-    <h1>Coucou</h1>
-    <a href="/login">login</a>
-    <a href="/logout">logout</a>
-    <a href="/dashboard">dashboard</a>
+{#   <div id="root"></div>#}
+{#   <script type="text/javascript" src="{{ asset('build/app.js') }}"></script>#}
 {% endblock %}

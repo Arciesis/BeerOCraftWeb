@@ -5,8 +5,8 @@ import BeerStylesMenu from './BeerStylesMenu';
 
 const LeftPanelMenu = () => {
   return (
-    <div className="left-panel-menu-wrapper">
-      <ul className="left-panel-menu-list">
+    <div>
+      <ul>
         <li>
           <Link to="/dashboard/fermentables/">Fermentables</Link>
         </li>

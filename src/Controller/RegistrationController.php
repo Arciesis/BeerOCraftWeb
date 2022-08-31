@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -23,17 +23,16 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    /**
-     * @Route("/register", name="app_register", methods={"get","post"})
-     */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+
+    #[Route('/{reactRouting}', name:'app_register', methods:['GET','POST'])]
+    public function register(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            // hash the plain password
             $entityManager = $this->getDoctrine()->getManager()->getRepository(User::class);
             $result = $entityManager->findOneBy([
                 'realUsername' => $form->get('realUsername')->getData(),
@@ -43,11 +42,11 @@ class RegistrationController extends AbstractController
                 $this->addFlash('register_username_taken', 'Your Username is already taken');
             } else {
 
-                if ($form->get('Password')->getData() === $form->get('Confirm_password')->getData()) {
+                if ($form->get('password')->getData() === $form->get('confirm_password')->getData()) {
                     $user->setPassword(
-                        $passwordEncoder->encodePassword(
+                        $passwordEncoder->hashPassword(
                             $user,
-                            $form->get('Password')->getData()
+                            $form->get('password')->getData()
                         )
                     );
                 }
@@ -70,7 +69,7 @@ class RegistrationController extends AbstractController
 
                 // do anything else you need here, like send an email
 
-                return $this->redirectToRoute('index');
+                return $this->redirectToRoute('dashboard');
             }
         }
 
@@ -79,9 +78,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/verify/email", name="app_verify_email")
-     */
+    #[Route('/verify/email', name:'app_verify_email', methods:['GET','POST'])]
     public function verifyUserEmail(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
