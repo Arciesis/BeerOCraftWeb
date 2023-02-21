@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
-    // TODO put a slug fields in all ApiRessource Entity that can be match with an URL
+    // TODO put a slug fields in all ApiResources Entity that can be match with an URL
 
     #[Template("main/index.html.twig")]
     #[Route("/{reactRouting}", name: 'index')]
@@ -21,13 +21,13 @@ class MainController extends AbstractController
 
     // Route("/dashboard{reactRouting}", name="dashboard", requirements={"reactRouting"=".+"}, defaults={"reactRouting": null})
 
-//    /**
-//     * @Template("main/dasboard.html.twig")
-//     * @Route("/dashboard", name="dashboard")
-//     */
+
+//     #[Template("main/dashboard.html.twig")]
+//     #[Route("/dashboard", name: "dashboard")]
+//
 //    public function dashboard(): Response
 //    {
-//        return $this->render('main/dasboard.html.twig');
+//        return $this->render('main/dashboard.html.twig');
 //    }
 
 }

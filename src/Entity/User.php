@@ -31,11 +31,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
             'security' => "is_granted('USER_EDIT', object)",
         ],
     ],
-    normalizationContext: [
-        'groups' => ['user:read'],
-    ],
     denormalizationContext: [
         'groups' => ['user:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['user:read'],
     ],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

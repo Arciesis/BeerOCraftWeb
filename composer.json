@@ -64,7 +64,7 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": false,
             "symfony/flex": true,
-            "symfony/runtime": false
+            "symfony/runtime": true
         }
     },
     "autoload": {

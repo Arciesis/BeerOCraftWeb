@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
     }
 
 
-    #[Route('/{reactRouting}', name:'app_register', methods:['GET','POST'])]
+    #[Route('/register', name:'app_register', methods:['GET','POST'])]
     public function register(Request $request, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User();
