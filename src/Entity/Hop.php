@@ -85,9 +85,9 @@ class Hop
         return $this->alphaAcide;
     }
 
-    public function setAlphaAcide(int $alphaAcide): self
+    public function setAlphaAcid(int $alphaAcid): self
     {
-        $this->alphaAcide = $alphaAcide;
+        $this->alphaAcide = $alphaAcid;
 
         return $this;
     }
@@ -97,9 +97,9 @@ class Hop
         return $this->betaAcide;
     }
 
-    public function setBetaAcide(int $betaAcide): self
+    public function setBetaAcid(int $betaAcid): self
     {
-        $this->betaAcide = $betaAcide;
+        $this->betaAcide = $betaAcid;
 
         return $this;
     }
@@ -193,6 +193,9 @@ class Hop
         return $this->type;
     }
 
+    /**
+     * @throws IngredientTypeException
+     */
     public function setType(string $type): self
     {
         if (in_array($type, self::TYPE)){

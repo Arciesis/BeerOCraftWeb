@@ -48,10 +48,8 @@ class SecurityController extends AbstractController
 //        ], Response::HTTP_UNAUTHORIZED);
 //    }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout()
+    #[Route("/logout", name:"app_logout")]
+    public function logout(): void
     {
         return;
     }

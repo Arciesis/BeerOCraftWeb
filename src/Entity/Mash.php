@@ -24,8 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             'get',
             'patch',
         ],
-        normalizationContext: ['groups' => 'read'],
-        denormalizationContext: ['groups' => 'write']
+        denormalizationContext: ['groups' => 'write'],
+        normalizationContext: ['groups' => 'read']
     )
 ]
 #[ORM\Entity(repositoryClass: MashRepository::class)]
